@@ -13,8 +13,10 @@
 		UPDATE `word_write`.`student` SET  `stuclass`=#{stuclass}, `stuname`=#{stuname},`stupwd`=#{stupwd}, `stuphone`=#{stuphone}, `parphone`=#{parphone} WHERE `stuid`=#{stuid};
 	</update>
     <delete id="delStudent" parameterType="String">
-	   delete from Student where stuid=#{stuid}
-	</delete>
+        delete
+        from Student
+        where stuid = #{stuid}
+    </delete>
     <select id="findStudentCount" resultType="int">
         select COUNT(1) from student t,stuclass c
         <where>
@@ -42,6 +44,8 @@
     </select>
 
     <select id="findStudentById" parameterType="String" resultType="Student">
-	    select * from student where stuid=#{stuid}
-	</select>
+        select *
+        from student
+        where stuid = #{stuid}
+    </select>
 </mapper>

@@ -4,9 +4,9 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.word.write.dao.MarkMappper">
     <insert id="addMark" parameterType="Mark">
-		INSERT INTO `word_write`.`mark` (`mid`, `stuid`, `stuclass`, `mark`, `markdate`, `isflag`, `remark`, `pnum`)
-		 VALUES (#{mid}, #{stuid}, #{stuclass}, #{mark}, #{markdate}, #{isflag}, #{remark}, #{pnum});
-	</insert>
+        INSERT INTO `word_write`.`mark` (`mid`, `stuid`, `stuclass`, `mark`, `markdate`, `isflag`, `remark`, `pnum`)
+        VALUES (#{mid}, #{stuid}, #{stuclass}, #{mark}, #{markdate}, #{isflag}, #{remark}, #{pnum});
+    </insert>
 
     <update id="updMark" parameterType="Mark">
 		UPDATE `word_write`.`mark`
@@ -22,8 +22,10 @@
 
 	</update>
     <delete id="delMark" parameterType="Integer">
-	   delete from Mark where mid=#{mid}
-	</delete>
+        delete
+        from Mark
+        where mid = #{mid}
+    </delete>
     <select id="findMarkCount" resultType="int">
         select COUNT(1) from mark m,student t,stuclass c ,paper p
         <where>
@@ -62,6 +64,9 @@
         limit #{pageStart},#{pageSize}
     </select>
     <select id="findMarkById" parameterType="Integer" resultType="Mark">
+        select *
+        from Mark
+        where mid = #{mid}
 	    select * from Mark where mid=#{mid}
 	</select>
     <select id="findStudentByStuId" resultType="Paper">

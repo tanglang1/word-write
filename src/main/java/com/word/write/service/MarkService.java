@@ -14,15 +14,20 @@ public interface MarkService {
             , int pageStart
             , int pageSize
     );
+
     int findMarkCountService(Integer isflag
             , String markDateStart
             , String markDateEnd
             , String pnum
             , Integer stuclass
     );
+
     Mark findMarkByIdService(Integer mid);
+
     int addMarkService(Mark mark);
+
     int updMarkService(Mark mark);
+
     int delMarkService(Integer mid);
     List<Student> findStudentByStuId(String stuid
             ,Integer stuclass);

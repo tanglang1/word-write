@@ -21,16 +21,17 @@ public class TeacherController {
 
     //展示查询页面
     @RequestMapping("showFindTeacher")
-    public String showFindPaper(){
+    public String showFindPaper() {
         return "teacher/findTeacher";
     }
+
     //查询数据
     @RequestMapping("findTeacher")
     @ResponseBody
     public String findPaper(HttpServletRequest request, @RequestParam(value = "tname"
             , required = false) String tname
             , @RequestParam(value = "stuclass", required = false) Integer stuclass
-    ){
+    ) {
         // 获取页面显示的条数
         int pageNum = Integer.parseInt(request.getParameter("limit")); //pageSize
         // 获取页面当前页
@@ -38,35 +39,37 @@ public class TeacherController {
         // 计算数据库的分页从第几行开始取数
         // 假设每页显示条数为pageNum10条　当前页为第currPage3页　则(3-1)*10=20
         // sql 语句为　　select * from 表    where 条件   limit 20,10
-        int pageCount =(currPage - 1) * pageNum;
-        List<Teacher> list = teacherService.findTeacherService(tname,stuclass,pageCount,pageNum);
-        String json= JSON.toJSONString(list);
-        int count= teacherService.findTeacherCountService(tname,stuclass);
-        String path = "{\"code\":0,\"msg\":\"\",\"count\":"+count+",\"data\":"
+        int pageCount = (currPage - 1) * pageNum;
+        List<Teacher> list = teacherService.findTeacherService(tname, stuclass, pageCount, pageNum);
+        String json = JSON.toJSONString(list);
+        int count = teacherService.findTeacherCountService(tname, stuclass);
+        return "{\"code\":0,\"msg\":\"\",\"count\":" + count + ",\"data\":"
                 + json + "}";
-        return path;
     }
+
     //展示添加页面
     @RequestMapping("showAddTeacher")
-    public String showAddPaper(){
+    public String showAddPaper() {
         return "teacher/addTeacher";
     }
+
     //添加
     @RequestMapping("addTeacher")
     @ResponseBody
-    public int addPaper(Teacher teacher){
-        int count=0;
-        if(teacher!=null){
-            count= teacherService.addTeacherService(teacher);
+    public int addPaper(Teacher teacher) {
+        int count = 0;
+        if (teacher != null) {
+            count = teacherService.addTeacherService(teacher);
         }
         System.out.println(count);
         return count;
     }
+
     //显示修改页面
     //根据id查询
     @RequestMapping("/showUpdTeacher")
-    public String showUpdSort(Model model, @RequestParam(value = "tid", required = false)Integer tid) {
-        model.addAttribute("tid",tid);
+    public String showUpdSort(Model model, @RequestParam(value = "tid", required = false) Integer tid) {
+        model.addAttribute("tid", tid);
         return "teacher/updTeacher";
     }
 
@@ -74,18 +77,17 @@ public class TeacherController {
     @RequestMapping("/findTeacherById")
     @ResponseBody
     public String findPaperById(@RequestParam(value = "tid", required = false) Integer tid) {
-        Teacher Teacher= teacherService.findTeacherByIdService(tid);
-        String json= JSON.toJSONString(Teacher);
-        return json;
+        Teacher Teacher = teacherService.findTeacherByIdService(tid);
+        return JSON.toJSONString(Teacher);
     }
 
     //修改
     @RequestMapping("updTeacher")
     @ResponseBody
-    public int updPaper(Teacher teacher){
-        int count=0;
-        if(teacher!=null){
-            count= teacherService.updTeacherService(teacher);
+    public int updPaper(Teacher teacher) {
+        int count = 0;
+        if (teacher != null) {
+            count = teacherService.updTeacherService(teacher);
         }
         return count;
     }
@@ -93,8 +95,7 @@ public class TeacherController {
     //删除
     @RequestMapping("delTeacher")
     @ResponseBody
-    public int delPaper(@RequestParam(value = "tid", required = false)Integer tid){
-        int count = teacherService.delTeacherService(tid);
-        return count;
+    public int delPaper(@RequestParam(value = "tid", required = false) Integer tid) {
+        return teacherService.delTeacherService(tid);
     }
 }

@@ -25,18 +25,19 @@ public class MarkController {
 
     //展示查询页面
     @RequestMapping("showFindMark")
-    public String showFindMark(){
+    public String showFindMark() {
         return "mark/findMark";
     }
+
     //查询数据
     @RequestMapping("findMark")
     @ResponseBody
     public String findMark(HttpServletRequest request
-            ,@RequestParam(value = "markDateStart", required = false) String markDateStart
-            ,@RequestParam(value = "markDateEnd", required = false) String markDateEnd
-            ,@RequestParam(value = "isflag", required = false) Integer isflag
-            ,@RequestParam(value = "stuclass", required = false) Integer stuclass
-            ,@RequestParam(value = "pnum", required = false) String pnum){
+            , @RequestParam(value = "markDateStart", required = false) String markDateStart
+            , @RequestParam(value = "markDateEnd", required = false) String markDateEnd
+            , @RequestParam(value = "isflag", required = false) Integer isflag
+            , @RequestParam(value = "stuclass", required = false) Integer stuclass
+            , @RequestParam(value = "pnum", required = false) String pnum) {
         // 获取页面显示的条数
         int pageNum = Integer.parseInt(request.getParameter("limit")); //pageSize
         // 获取页面当前页
@@ -44,19 +45,19 @@ public class MarkController {
         // 计算数据库的分页从第几行开始取数
         // 假设每页显示条数为pageNum10条　当前页为第currPage3页　则(3-1)*10=20
         // sql 语句为　　select * from 表    where 条件   limit 20,10
-        int pageCount =(currPage - 1) * pageNum;
-        List<Mark> list = markService.findMarkService(isflag,markDateStart,markDateEnd,pnum,stuclass,pageCount,pageNum);
-        String json= JSON.toJSONString(list);
-        int count= markService.findMarkCountService(isflag,markDateStart,markDateEnd,pnum,stuclass);
-        String path = "{\"code\":0,\"msg\":\"\",\"count\":"+count+",\"data\":"
+        int pageCount = (currPage - 1) * pageNum;
+        List<Mark> list = markService.findMarkService(isflag, markDateStart, markDateEnd, pnum, stuclass, pageCount, pageNum);
+        String json = JSON.toJSONString(list);
+        int count = markService.findMarkCountService(isflag, markDateStart, markDateEnd, pnum, stuclass);
+        return "{\"code\":0,\"msg\":\"\",\"count\":" + count + ",\"data\":"
                 + json + "}";
-        return path;
     }
+
     //显示修改页面
     //根据id查询
     @RequestMapping("/showUpdMark")
-    public String showUpdSort(Model model,@RequestParam(value = "mid", required = false)Integer mid) {
-        model.addAttribute("mid",mid);
+    public String showUpdSort(Model model, @RequestParam(value = "mid", required = false) Integer mid) {
+        model.addAttribute("mid", mid);
         return "mark/updMark";
     }
 
@@ -64,18 +65,17 @@ public class MarkController {
     @RequestMapping("/findMarkById")
     @ResponseBody
     public String findPaperById(@RequestParam(value = "mid", required = false) Integer mid) {
-        Mark Mark= markService.findMarkByIdService(mid);
-        String json= JSON.toJSONString(Mark);
-        return json;
+        Mark Mark = markService.findMarkByIdService(mid);
+        return JSON.toJSONString(Mark);
     }
 
     //修改
     @RequestMapping("updMark")
     @ResponseBody
-    public int updPaper(Mark mark){
-        int count=0;
-        if(mark!=null){
-            count= markService.updMarkService(mark);
+    public int updPaper(Mark mark) {
+        int count = 0;
+        if (mark != null) {
+            count = markService.updMarkService(mark);
         }
         return count;
     }
@@ -97,9 +97,8 @@ public class MarkController {
     //删除
     @RequestMapping("delMark")
     @ResponseBody
-    public int delPaper(@RequestParam(value = "mid", required = false)Integer mid){
-        int count = markService.delMarkService(mid);
-        return count;
+    public int delPaper(@RequestParam(value = "mid", required = false) Integer mid) {
+        return markService.delMarkService(mid);
     }
 
     //显示发送页面
@@ -107,16 +106,17 @@ public class MarkController {
     public String showSendMss(Model model) {
         return "mark/sendMss";
     }
+
     //发送短信
     @RequestMapping("sendMss")
     @ResponseBody
-    public int sendMss(@RequestParam(value = "phone", required = false)String phone
-    ,@RequestParam(value = "mark", required = false)String mark){
-        int count=0;
+    public int sendMss(@RequestParam(value = "phone", required = false) String phone
+            , @RequestParam(value = "mark", required = false) String mark) {
+        int count = 0;
         Sendmss s = new Sendmss();
         try {
             s.sendSms(phone, mark);
-            count=1;
+            count = 1;
         } catch (ClientException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -130,16 +130,17 @@ public class MarkController {
     public String showSendMss1(Model model) {
         return "mark/sendMss1";
     }
+
     //发送短信
     @RequestMapping("sendMss1")
     @ResponseBody
-    public int sendMss1(@RequestParam(value = "phone", required = false)String phone
-            ,@RequestParam(value = "text", required = false)String text){
-        int count=0;
-        SendMsg_webchinese sendMsg_webchinese=new SendMsg_webchinese();
+    public int sendMss1(@RequestParam(value = "phone", required = false) String phone
+            , @RequestParam(value = "text", required = false) String text) {
+        int count = 0;
+        SendMsg_webchinese sendMsg_webchinese = new SendMsg_webchinese();
         try {
-            sendMsg_webchinese.sendMsg(phone,text);
-            count=1;
+            sendMsg_webchinese.sendMsg(phone, text);
+            count = 1;
         } catch (ClientException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -153,13 +154,13 @@ public class MarkController {
     //发送短信
     @RequestMapping("sendMss2")
     @ResponseBody
-    public int sendMss2(@RequestParam(value = "phone", required = false)String phone
-            ,@RequestParam(value = "mark", required = false)String mark){
-        int count=0;
+    public int sendMss2(@RequestParam(value = "phone", required = false) String phone
+            , @RequestParam(value = "mark", required = false) String mark) {
+        int count = 0;
         Sendmss s = new Sendmss();
         try {
             s.sendSms1(phone, mark);
-            count=1;
+            count = 1;
         } catch (ClientException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();

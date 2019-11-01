@@ -23,21 +23,18 @@ public class UserController {
     private UserService userService;
 
     @RequestMapping("sysMenu")
-    public String sysMenu(HttpServletRequest request, Model model){
+    public String sysMenu(HttpServletRequest request, Model model) {
         HttpSession session = request.getSession();
-//        int role=(int) session.getAttribute("role");
-//        String login=(String) session.getAttribute("login");
-//        String pwd=(String) session.getAttribute("pwd");
-//        model.addAttribute("role",role);
-//        model.addAttribute("login",login);
-//        model.addAttribute("pwd",pwd);
+        Integer role = (Integer) session.getAttribute("role");
+        model.addAttribute("role", role);
+
+
         return "sys/sysMenu";
     }
 
 
-
     @RequestMapping("showLogin")
-    public String showLogin(){
+    public String showLogin() {
         return "sys/login";
     }
 
@@ -46,6 +43,8 @@ public class UserController {
     public int login(HttpServletRequest request
             , @RequestParam(value = "login", required = false) String login
             , @RequestParam(value = "pwd", required = false) String pwd
+            , @RequestParam(value = "role", required = false) Integer role) {
+        return "sys/login";
             , @RequestParam(value = "role", required = false) Integer role){
         System.out.println(role);
         HttpSession session = request.getSession();

@@ -4,13 +4,16 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.word.write.dao.WriteaMapper">
     <insert id="addWritea" parameterType="Writea">
-        INSERT INTO `word_write`.`writea` (`writeid`, `pid`, `writeword`, `isyes`, `writedate`, `stuid`, `stuclass`, `pnum`)
+        INSERT INTO `word_write`.`writea` (`writeid`, `pid`, `writeword`, `isyes`, `writedate`, `stuid`, `stuclass`,
+                                           `pnum`)
         VALUES (#{writeid}, #{pid}, #{writeword}, #{isyes}, #{writedate}, #{stuid}, #{stuclass}, #{pnum});
-	</insert>
+    </insert>
 
     <delete id="delWritea" parameterType="Integer">
-	   delete from `word_write`.`writea` where writeid=#{writeid}
-	</delete>
+        delete
+        from `word_write`.`writea`
+        where writeid = #{writeid}
+    </delete>
     <select id="findPaperByPnum" resultType="Paper">
         select p.*,w.*,s.* from paper p,worda w,stuclass s
         <where>
@@ -54,11 +57,14 @@
         </where>
     </select>
     <select id="countPaper" resultType="int">
-        select count(1) from paper p,worda w,stuclass s
+        select count(1)
+        from paper p,
+             worda w,
+             stuclass s
         where p.wordid = w.wordid
-        and p.classid = s.classid
-        and p.pnum=#{pnum}
-        and p.classid=#{classid}
+          and p.classid = s.classid
+          and p.pnum = #{pnum}
+          and p.classid = #{classid}
     </select>
     <select id="findWritea" resultType="Writea">
         select * from writea writea w,student t,stuclass c
@@ -80,22 +86,22 @@
         limit #{pageStart},#{pageSize}
     </select>
     <select id="findWriteaByIsYes" resultType="Writea">
-        select * from  writea w,student t,stuclass c,paper p,worda wo
+        select * from writea w,student t,stuclass c,paper p,worda wo
         <where>
-        w.stuid=t.stuid and w.stuclass=c.classid and p.wordid = wo.wordid and p.pnum=w.pnum
-        <if test="pnum!=null">
-            and w.pnum like CONCAT('%',#{pnum},'%')
-        </if>
-        <if test="stuclass!=null">
-            and w.stuclass=#{stuclass}
-        </if>
-        <if test="stuid!=null">
-            and w.stuid=#{stuid}
-        </if>
-        <if test="isyes!=null">
-            and w.isyes=#{isyes}
-        </if>
-    </where>
+            w.stuid=t.stuid and w.stuclass=c.classid and p.wordid = wo.wordid and p.pnum=w.pnum
+            <if test="pnum!=null">
+                and w.pnum like CONCAT('%',#{pnum},'%')
+            </if>
+            <if test="stuclass!=null">
+                and w.stuclass=#{stuclass}
+            </if>
+            <if test="stuid!=null">
+                and w.stuid=#{stuid}
+            </if>
+            <if test="isyes!=null">
+                and w.isyes=#{isyes}
+            </if>
+        </where>
         order by writedate
     </select>
 

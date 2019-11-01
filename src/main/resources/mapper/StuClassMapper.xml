@@ -22,21 +22,32 @@
         </trim>
     </select>
     <insert id="addStuClass" parameterType="String">
-        INSERT INTO stuclass (classname) VALUES (#{classname})
+        INSERT INTO stuclass (classname)
+        VALUES (#{classname})
     </insert>
     <select id="findOne" parameterType="Integer" resultType="StuClass">
-        SELECT * FROM stuclass where classid = #{id}
+        SELECT *
+        FROM stuclass
+        where classid = #{id}
     </select>
     <update id="updStuClass" parameterType="StuClass">
-        UPDATE stuclass SET  classname=#{classname} WHERE classid=#{classid}
+        UPDATE stuclass
+        SET classname=#{classname}
+        WHERE classid = #{classid}
     </update>
     <select id="findStudent" parameterType="Integer" resultType="Student">
-        SELECT * FROM student WHERE stuclass = #{stuclass}
+        SELECT *
+        FROM student
+        WHERE stuclass = #{stuclass}
     </select>
     <delete id="delStuClass" parameterType="Integer">
-        DELETE FROM stuclass WHERE classid=#{classid}
+        DELETE
+        FROM stuclass
+        WHERE classid = #{classid}
     </delete>
     <delete id="delStudent" parameterType="Integer">
-        DELETE FROM student WHERE stuclass = #{stuclass}
+        DELETE
+        FROM student
+        WHERE stuclass = #{stuclass}
     </delete>
 </mapper>
