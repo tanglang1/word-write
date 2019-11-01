@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 @Controller
 @RequestMapping("paper")
@@ -77,46 +79,25 @@ public class PaperController {
     @RequestMapping("addPaper")
     @ResponseBody
     public int addPaper(Paper paper, @RequestParam(value = "wordCount", required = false) int wordCount) {
-        int count2 = 0;
-        System.out.println(count2);
+        int i1 = 0;
         if (paper != null) {
-            //int[] a = new int[]{-1,-1,-1,-1};//初始化数组
             Random random = new Random();
             int num = paperService.findWordaCountService();
-            int[] array = new int[wordCount];
-            int count = 0;              //记录数字存储到那个位置的下标
-            boolean flag = true;       // 总循环标记
-            int number = new Random().nextInt(num) + 1;   //这是产生1-1000的随机数
-            System.out.println(array[0]);
-            while (flag) {
-                //判断这个数是否在数组中
-                for (int i = 0; i < wordCount; i++) {
-                    if (array[i] == number) {
-                        break;
-                    }
-                }
-
-                //如果不在就将这个数存入相应位置
-                System.out.println("33333333333333333333333");
-                //判断数组是否满了
-                if (count == wordCount) {
-                    flag = false;
-                } else {
-                    array[count] = number;
-                    count++;
-                    number = new Random().nextInt(num) + 1;
+            Set<Integer> integerSet = new HashSet<>();
+            while (i1 < wordCount) {
+                if (integerSet.add(random.nextInt(num))) {
+                    i1++;
                 }
             }
-            for (int value : array) {
+            for (int value : integerSet) {
                 System.out.print(value + ",");
                 paper.setWordid(value);
                 System.out.println("444444444444444444444444");
-                count2 = paperService.addPaperService(paper);
+                i1 = paperService.addPaperService(paper);
             }
-            System.out.println();
         }
-        System.out.println(count2);
-        return count2;
+        System.out.println(i1);
+        return i1;
     }
 
     //显示修改页面
