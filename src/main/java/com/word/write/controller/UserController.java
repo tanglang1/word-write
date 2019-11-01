@@ -14,17 +14,16 @@ import javax.servlet.http.HttpSession;
 public class UserController {
 
     @RequestMapping("sysMenu")
-    public String sysMenu(HttpServletRequest request, Model model){
+    public String sysMenu(HttpServletRequest request, Model model) {
         HttpSession session = request.getSession();
-        Integer role=(Integer) session.getAttribute("role");
-        model.addAttribute("role",role);
+        Integer role = (Integer) session.getAttribute("role");
+        model.addAttribute("role", role);
         return "sys/sysMenu";
     }
 
 
-
     @RequestMapping("showLogin")
-    public String showLogin(){
+    public String showLogin() {
         return "sys/login";
     }
 
@@ -33,7 +32,7 @@ public class UserController {
     public String login(HttpServletRequest request
             , @RequestParam(value = "login", required = false) String login
             , @RequestParam(value = "pwd", required = false) String pwd
-            , @RequestParam(value = "role", required = false) Integer role){
+            , @RequestParam(value = "role", required = false) Integer role) {
         return "sys/login";
     }
 }

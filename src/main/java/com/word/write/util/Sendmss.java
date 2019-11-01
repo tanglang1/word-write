@@ -1,4 +1,5 @@
 package com.word.write.util;
+
 import com.aliyuncs.CommonRequest;
 import com.aliyuncs.CommonResponse;
 import com.aliyuncs.DefaultAcsClient;
@@ -19,9 +20,9 @@ public class Sendmss {
     // TODO 此处需要替换成开发者自己的AK(在阿里云访问控制台寻找)
     private static final String accessKeyId = "LTAI4FdzDPScaHhHMUQpyBAT";
 
-    private static final String accessKeySecret ="u0duOYQx06nhVK3BzyV20v0i0yoC70";
+    private static final String accessKeySecret = "u0duOYQx06nhVK3BzyV20v0i0yoC70";
 
-    public SendSmsResponse sendSms(String phone,String mark) throws ClientException {
+    public SendSmsResponse sendSms(String phone, String mark) throws ClientException {
         //可自助调整超时时间
         System.setProperty("sun.net.client.defaultConnectTimeout", "10000");
         System.setProperty("sun.net.client.defaultReadTimeout", "10000");
@@ -39,7 +40,7 @@ public class Sendmss {
         //必填:短信模板-可在短信控制台中找到
         request.setTemplateCode("SMS_176520266");
         //可选:模板中的变量替换JSON串,如模板内容为"亲爱的${name},您的验证码为${code}"时,此处的值为
-        request.setTemplateParam("{ \"code\":\""+mark+"\"}");
+        request.setTemplateParam("{ \"code\":\"" + mark + "\"}");
         //选填-上行短信扩展码(无特殊需求用户请忽略此字段)
         //request.setSmsUpExtendCode("90997");
         //可选:outId为提供给业务方扩展字段,最终在短信回执消息中将此值带回给调用者
@@ -48,7 +49,8 @@ public class Sendmss {
         SendSmsResponse sendSmsResponse = acsClient.getAcsResponse(request);
         return sendSmsResponse;
     }
-    public void sendSms1(String phone,String mark) throws ClientException {
+
+    public void sendSms1(String phone, String mark) throws ClientException {
         DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou", accessKeyId, accessKeySecret);
         IAcsClient client = new DefaultAcsClient(profile);
 
@@ -61,7 +63,7 @@ public class Sendmss {
         request.putQueryParameter("RegionId", "cn-hangzhou");
         request.putQueryParameter("SignName", "雷公坝考试系统");
         request.putQueryParameter("TemplateCode", "SMS_176525334");
-        request.putQueryParameter("TemplateParam", "{ \"code\":\""+mark+"\"}");
+        request.putQueryParameter("TemplateParam", "{ \"code\":\"" + mark + "\"}");
         try {
             CommonResponse response = client.getCommonResponse(request);
             System.out.println(response.getData());
