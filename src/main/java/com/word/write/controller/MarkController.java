@@ -3,7 +3,7 @@ package com.word.write.controller;
 import com.alibaba.fastjson.JSON;
 import com.aliyuncs.exceptions.ClientException;
 import com.word.write.pojo.Mark;
-import com.word.write.service.MarkService;
+import com.word.write.pojo.Student;
 import com.word.write.service.MarkService;
 import com.word.write.util.SendMsg_webchinese;
 import com.word.write.util.Sendmss;
@@ -12,14 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import com.aliyuncs.CommonRequest;
-import com.aliyuncs.CommonResponse;
-import com.aliyuncs.DefaultAcsClient;
-import com.aliyuncs.IAcsClient;
-import com.aliyuncs.exceptions.ClientException;
-import com.aliyuncs.exceptions.ServerException;
-import com.aliyuncs.http.MethodType;
-import com.aliyuncs.profile.DefaultProfile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -87,7 +79,21 @@ public class MarkController {
         }
         return count;
     }
-
+    //发送短信
+    @RequestMapping("sendMark")
+    @ResponseBody
+    public int sendMark(Mark mark) throws Exception {
+        int count=0;
+        if(mark!=null){
+            SendMsg_webchinese sendMsg_webchinese=new SendMsg_webchinese();
+            Mark mark1=markService.findMarkByIdService(mark.getMid());
+            List<Student> list=markService.findStudentByStuId(mark.getStuid(),mark.getStuclass());
+            String text="尊敬的家长，您的孩子在"+mark1.getPnum()+"测试中的分数为："+mark1.getMark();
+            sendMsg_webchinese.sendMsg(list.get(0).getParphone(),text);
+            count= markService.updMarkService(mark);
+        }
+        return count;
+    }
     //删除
     @RequestMapping("delMark")
     @ResponseBody

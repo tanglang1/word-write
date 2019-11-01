@@ -1,6 +1,7 @@
 package com.word.write.dao;
 
 import com.word.write.pojo.Paper;
+import com.word.write.pojo.Student;
 import com.word.write.pojo.Writea;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -33,4 +34,5 @@ public interface WriteaMapper {
     int countPaper(@Param("pnum") String pnum, @Param("classid") Integer classid);
     int addWritea(Writea writea);
     int delWritea(@Param("writeid") Integer writeid);
+
 }

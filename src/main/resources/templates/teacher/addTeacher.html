@@ -51,6 +51,18 @@
     <div class="layui-row">
         <div class="layui-col-sm4">
             <div class="layui-form-item">
+                <label class="layui-form-label">教师密码<span style="color: red;">*</span></label>
+                <div class="layui-input-block">
+                    <input type="text" id="tpwd" name="tpwd" required value="25"
+                           lay-verify="required"  autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="layui-row">
+        <div class="layui-col-sm4">
+            <div class="layui-form-item">
                 <label class="layui-form-label">教师班级<span style="color: red;">*</span></label>
                 <div class="layui-input-block">
                     <select name="classid" id="classid"  lay-verify="required">
@@ -114,6 +126,7 @@
                     data : {
                         stuclass : $("#classid option:selected").val(),
                         tname : $("#tname").val(),
+                        tpwd : $("#tpwd").val(),
                         tphone: $("#tphone").val()
                     },
                     dataType : "json",

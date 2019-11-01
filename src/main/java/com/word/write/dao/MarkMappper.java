@@ -1,6 +1,7 @@
 package com.word.write.dao;
 
 import com.word.write.pojo.Mark;
+import com.word.write.pojo.Student;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -25,4 +26,6 @@ public interface MarkMappper {
     int addMark(Mark mark);
     int updMark(Mark mark);
     int delMark(@Param("mid") Integer mid);
+    List<Student> findStudentByStuId(@Param("stuid") String stuid
+            , @Param("stuclass") Integer stuclass);
 }

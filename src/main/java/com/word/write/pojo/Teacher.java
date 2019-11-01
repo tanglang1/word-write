@@ -12,5 +12,7 @@ public class Teacher {
     private String tname;
     //教师手机号
     private String tphone;
+    //密码
+    private String tpwd;
     private String stuclass1;
 }

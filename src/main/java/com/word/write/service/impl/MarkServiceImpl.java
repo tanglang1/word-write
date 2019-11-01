@@ -2,6 +2,7 @@ package com.word.write.service.impl;
 
 import com.word.write.dao.MarkMappper;
 import com.word.write.pojo.Mark;
+import com.word.write.pojo.Student;
 import com.word.write.service.MarkService;
 import org.springframework.stereotype.Service;
 
@@ -40,5 +41,10 @@ public class MarkServiceImpl implements MarkService {
     @Override
     public int delMarkService(Integer mid) {
         return markMappper.delMark(mid);
+    }
+
+    @Override
+    public List<Student> findStudentByStuId(String stuid, Integer stuclass) {
+        return markMappper.findStudentByStuId(stuid, stuclass);
     }
 }

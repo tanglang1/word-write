@@ -14,6 +14,7 @@ public class Student {
     private String stuphone;
     //家长手机号
     private String parphone;
-
+    //密码
+    private String stupwd;
     private String stuclass1;
 }

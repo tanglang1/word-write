@@ -52,6 +52,18 @@
     <div class="layui-row">
         <div class="layui-col-sm4">
             <div class="layui-form-item">
+                <label class="layui-form-label">学生密码<span style="color: red;">*</span></label>
+                <div class="layui-input-block">
+                    <input type="text" id="stupwd" name="stupwd" required value="25"
+                           lay-verify="required"  autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="layui-row">
+        <div class="layui-col-sm4">
+            <div class="layui-form-item">
                 <label class="layui-form-label">学生班级<span style="color: red;">*</span></label>
                 <div class="layui-input-block">
                     <select name="classid" id="classid"  lay-verify="required">
@@ -73,7 +85,7 @@
     <div class="layui-row">
         <div class="layui-col-sm4">
             <div class="layui-form-item">
-                <label class="layui-form-label">学生手机号</label>
+                <label class="layui-form-label">父母手机号</label>
                 <div class="layui-input-block">
                     <input type="text" name="parphone" id="parphone" required  lay-verify="required" autocomplete="off" class="layui-input">
                 </div>
@@ -140,6 +152,7 @@
                         stuid : $("#stuid").val(),
                         stuclass : $("#classid option:selected").val(),
                         stuname : $("#stuname").val(),
+                        stupwd : $("#stupwd").val(),
                         stuphone: $("#stuphone").val(),
                         parphone : $("#parphone").val()
                     },
@@ -224,6 +237,7 @@
             success:function(reqData){
                     $("#stuid").val(reqData.stuid),
                     $("#stuname").val(reqData.stuname),
+                        $("#stupwd").val(reqData.stupwd),
                     $("#stuphone").val(reqData.stuphone),
                     $("#parphone").val(reqData.parphone),
                     //下拉修改时的默认选中

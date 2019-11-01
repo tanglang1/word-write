@@ -5,12 +5,12 @@
 
 <mapper namespace="com.word.write.dao.TeacherMapper">
     <insert id="addTeacher" parameterType="Teacher">
-		INSERT INTO `word_write`.`teacher` (`tid`, `stuclass`, `tname`, `tphone`)
-		 VALUES (#{tid}, #{stuclass}, #{tname}, #{tphone});
+		INSERT INTO `word_write`.`teacher` (`tid`, `stuclass`, `tname`,`tpwd`, `tphone`)
+		 VALUES (#{tid}, #{stuclass}, #{tname}, #{tpwd}, #{tphone});
 	</insert>
 
     <update id="updTeacher" parameterType="Teacher">
-		UPDATE `word_write`.`teacher` SET  `stuclass`=#{stuclass}, `tname`=#{tname}, `tphone`=#{tphone} WHERE `tid`=#{tid};
+		UPDATE `word_write`.`teacher` SET  `stuclass`=#{stuclass}, `tname`=#{tname},`tpwd`=#{tpwd}, `tphone`=#{tphone} WHERE `tid`=#{tid};
 	</update>
     <delete id="delTeacher" parameterType="Integer">
 	   delete from teacher where tid=#{tid}

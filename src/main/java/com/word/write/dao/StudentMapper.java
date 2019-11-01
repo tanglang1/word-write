@@ -17,4 +17,5 @@ public interface StudentMapper {
               , @Param("pageSize") int pageSize);
       Student findStudentById(@Param("stuid") String stuid);
       int findStudentCount(@Param("stuname") String stuname,@Param("stuclass") Integer stuclass);
+
 }

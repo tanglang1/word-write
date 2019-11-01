@@ -35,7 +35,7 @@ public class WriteaController {
     @ResponseBody
     public String examStart(HttpServletRequest request) {
         HttpSession session = request.getSession();
-        Integer classid = 1;
+        Integer classid = (Integer) session.getAttribute("classid");
         String pnum="20191006175835";
         List<Paper> list = writeaService.showExam(pnum,classid);
         session.setAttribute("listp",list);
@@ -124,8 +124,9 @@ public class WriteaController {
 
     @RequestMapping("question")
     @ResponseBody
-    public String question(){
-        Integer classid = 1;
+    public String question(HttpServletRequest request){
+        HttpSession session = request.getSession();
+        Integer classid = (Integer) session.getAttribute("classid");
         String pnum="20191006175835";
         List<Paper> list=writeaService.findPaperByPnum(pnum,classid);
         String json=JSON.toJSONString(list);
