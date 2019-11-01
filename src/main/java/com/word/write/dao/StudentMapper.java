@@ -8,18 +8,13 @@ import java.util.List;
 
 @Mapper
 public interface StudentMapper {
-    int addStudent(Student student);
-
-    int updStudent(Student student);
-
-    int delStudent(@Param("stuid") String stuid);
-
-    List<Student> findStudent(@Param("stuname") String stuname
-            , @Param("stuclass") Integer stuclass
-            , @Param("pageStart") int pageStart
-            , @Param("pageSize") int pageSize);
-
-    Student findStudentById(@Param("stuid") String stuid);
-
-    int findStudentCount(@Param("stuname") String stuname, @Param("stuclass") Integer stuclass);
+      int addStudent(Student student);
+      int updStudent(Student student);
+      int delStudent(@Param("stuid") String stuid);
+      List<Student> findStudent(@Param("stuname") String stuname
+              ,@Param("stuclass") Integer stuclass
+              , @Param("pageStart") int pageStart
+              , @Param("pageSize") int pageSize);
+      Student findStudentById(@Param("stuid") String stuid);
+      int findStudentCount(@Param("stuname") String stuname,@Param("stuclass") Integer stuclass);
 }

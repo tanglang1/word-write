@@ -9,16 +9,18 @@
     </insert>
 
     <update id="updMark" parameterType="Mark">
-        UPDATE `word_write`.`mark`
-        SET `stuid`=#{stuid},
-            `stuclass`=#{stuclass},
-            `mark`=#{mark},
-            `markdate`=#{markdate},
-            `isflag`=#{isflag},
-            `remark`=#{remark},
-            `pnum`=#{pnum}
-        WHERE `mid` = #{mid};
-    </update>
+		UPDATE `word_write`.`mark`
+        <trim prefix="set" suffixOverrides="," suffix="WHERE (`mid`=#{mid});">
+            <if test="stuid!=null">`stuid`=#{stuid},</if>
+            <if test="stuclass!=null">`stuclass`=#{stuclass},</if>
+            <if test="mark!=null">`mark`=#{mark},</if>
+            <if test="markdate!=null">`markdate`=#{markdate},</if>
+            <if test="isflag!=null">`isflag`=#{isflag},</if>
+            <if test="remark!=null">`remark`=#{remark},</if>
+            <if test="pnum!=null">`remark`=#{pnum},</if>
+        </trim>
+
+	</update>
     <delete id="delMark" parameterType="Integer">
         delete
         from Mark
@@ -65,5 +67,17 @@
         select *
         from Mark
         where mid = #{mid}
+	    select * from Mark where mid=#{mid}
+	</select>
+    <select id="findStudentByStuId" resultType="Paper">
+        select * from student
+        <where>
+            <if test="stuid!=null">
+                and stuid =#{stuid}
+            </if>
+            <if test="stuclass!=null">
+                and stuclass=#{stuclass}
+            </if>
+        </where>
     </select>
 </mapper>

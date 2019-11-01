@@ -1,6 +1,7 @@
 package com.word.write.service;
 
 import com.word.write.pojo.Mark;
+import com.word.write.pojo.Student;
 
 import java.util.List;
 
@@ -28,4 +29,6 @@ public interface MarkService {
     int updMarkService(Mark mark);
 
     int delMarkService(Integer mid);
+    List<Student> findStudentByStuId(String stuid
+            ,Integer stuclass);
 }
