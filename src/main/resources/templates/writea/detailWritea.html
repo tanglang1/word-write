@@ -1,16 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>查看历史记录</title>
     <link rel="stylesheet"
           href="../../layuicms/layui/css/layui.css" >
     <script type="text/javascript"
             src="../../js/jquery-2.1.1.js" ></script>
     <script type="text/javascript"
             src="../../layuicms/layui/layui.js"></script>
+    <link rel="stylesheet" href="http://tiku.kgc.cn/resources/V11.8.0.2/css/ytk_css.css">
+    <link rel="stylesheet" type="text/css" href="http://tiku.kgc.cn/resources/V11.8.0.2/css/classranking.css">
+    <link rel="stylesheet" type="text/css" href="http://tiku.kgc.cn/resources/V11.8.0.2/css/yui3/grid.css">
+    <link rel="stylesheet" type="text/css" href="http://tiku.kgc.cn/resources/V11.8.0.2/css/themes.css">
+    <link rel="stylesheet" type="text/css" href="http://tiku.kgc.cn/resources/V11.8.0.2/css/style.css">
+    <link rel="stylesheet" type="text/css" href="http://tiku.kgc.cn/resources/V11.8.0.2/css/feedBack.css">
+    <link rel="icon" type="image/x-icon" href="http://tiku.kgc.cn/testing/favicon.ico">
+    <link type="text/css" rel="stylesheet" href="http://tiku.kgc.cn/resources/V11.8.0.2/js/laydate/need/laydate.css">
+    <link type="text/css" rel="stylesheet" href="http://tiku.kgc.cn/resources/V11.8.0.2/js/laydate/skins/default/laydate.css" id="LayDateSkin"></head>
+    <style type="text/css">
+        html{
+            height: 100%;
+        }
+
+        body{
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        header{
+            /* 我们希望 header 采用固定的高度，只占用必须的空间 */
+            /* 0 flex-grow, 0 flex-shrink, auto flex-basis */
+            flex: 0 0 auto;
+        }
+
+        .main-content{
+            /* 将 flex-grow 设置为1，该元素会占用全部可使用空间
+               而其他元素该属性值为0，因此不会得到多余的空间*/
+            /* 1 flex-grow, 0 flex-shrink, auto flex-basis */
+            flex: 1 0 auto;
+        }
+
+        footer{
+            /* 和 header 一样，footer 也采用固定高度*/
+            /* 0 flex-grow, 0 flex-shrink, auto flex-basis */
+            flex: 0 0 auto;
+        }
+    </style>
 </head>
 <body>
+
+<header id="basic-header">
+    <!-- header -->
+    <div class="header-content">
+        <div class="img-1"></div>
+        <div class="rec"></div>
+        <div class="text-1">题库</div>
+
+        <div class="right">
+            <a class="user-face"></a>
+            <a class="user-info" id="userName" th:text="${session.login}"></a>
+            <!-- <a class="user-info" id="userName">新建学员7</a> id="faceCollect" title="身份认证采集"  -->
+            <div class="esc">
+                <a href="../user/showLogin" title="">退出</a>
+            </div>
+        </div>
+    </div>
+
+</header>
+<br/>
+<section class="main-content" style="margin-top: 100px">
 <div class="layui-container layui-form">
     <div class="layui-row">
         <div class="layui-col-sm12">
@@ -18,20 +78,26 @@
         </div>
     </div>
     <div class="layui-row">
-        <div class="layui-col-sm3">
-            <div class="layui-form-item">
-                <label class="layui-form-label">是否错误<span style="color: red;">*</span></label>
-                <div class="layui-input-block">
-                    <input type="radio" name="isflag" value="1" title="是" checked>
-                    <input type="radio" name="isflag" value="0" title="否">
-                </div>
-            </div>
-        </div>
-        <div class="layui-col-sm3 " style=" padding-left: 70px;">
-            <button class="layui-btn layui-btn-sm" id="but" >
-                <i class="layui-icon layui-icon-search "></i>提交查询</button>
-            <button type="reset" id="rebut" class="layui-btn layui-btn-sm ">清空查询</button>
-        </div>
+<!--        <div class="layui-col-sm4">-->
+<!--            <div class="layui-form-item">-->
+<!--                <label class="layui-form-label">是否错误<span style="color: red;">*</span></label>-->
+<!--                <div class="layui-input-block">-->
+<!--                    <input type="radio" name="isflag" value="" title="全部" checked>-->
+<!--                    <input type="radio" name="isflag" value="1" title="是">-->
+<!--                    <input type="radio" name="isflag" value="0" title="否">-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="layui-col-sm5">-->
+<!--            &nbsp;-->
+<!--        </div>-->
+<!--        <div class="layui-col-sm3 " style=" padding-left: 70px;">-->
+<!--            <button class="layui-btn layui-btn-sm" id="but" >-->
+<!--                <i class="layui-icon layui-icon-search "></i>提交查询</button>-->
+<!--            <button class="layui-btn layui-btn-sm " id="btnSave">-->
+<!--                <i class="layui-icon layui-icon-ok "></i>退出-->
+<!--            </button>-->
+<!--        </div>-->
     </div>
     <div class="layui-row">
         <table lay-filter="dem" class="layui-table" id="demo1">
@@ -46,20 +112,13 @@
             <tbody class="layui-table-body" id="tbody">
 
             </tbody>
+            <input type="hidden" id="markdate" name="markdate" th:value="${session.markdate}" >
+            <input type="hidden" id="mid" name="mid" th:value="${session.mid}" >
         </table>
-<!--        <div class="layui-row" style="text-align: right;">-->
-<!--            <div class="layui-col-sm4">&nbsp;</div>-->
-<!--            <div class="layui-col-sm2">-->
-<!--                <button class="layui-btn layui-btn-sm " id="btnSave">-->
-<!--                    <i class="layui-icon layui-icon-ok "></i>保存-->
-<!--                </button>-->
-<!--                <button class="layui-btn layui-btn-sm " id="btnCancel">-->
-<!--                    <i class="layui-icon layui-icon-close "></i>取消-->
-<!--                </button>-->
-<!--            </div>-->
-<!--        </div>-->
     </div>
 </div>
+</section>
+<footer id="basicBottom" ><p>©2019 单词默写考试网</p> </footer>
 </body>
 <script type="text/javascript">
     layui.use('layer', function(){
@@ -72,45 +131,70 @@
             ,layer = layui.layer
             ,layedit = layui.layedit
             ,laydate = layui.laydate;
-
-
-
     });
 </script>
-
 <script type="text/javascript">
     function find(){
         $.ajax({
             type : "post",
             url : "../writea/detailQuestion",
             data : {
-                isyes:$("input[type='radio']:checked").val(),
+                markdate:$("#markdate").val(),
+                mid:$("#mid").val(),
+                isyes:$("input[type='radio']:checked").val()
             },
             dataType : "json",
             success : function(data) {
+
+                $.each(data,function(index,value){
+                    $("h2").text("试卷"+value.pnum);
+                    return;
+                });　　　　　　　//将拼接的内容放置内容显示区域
                 //alert(data);
-                var list=[];
                 var str = '';
                 $.each(data,function(index,value){
-                    str += "<tr>";
-                    str += "<td>第";
-                    str += index+1;
-                    str += "题</td>";
-                    str += "<td>";
-                    str += value.wordmeaning;
-                    str += "</td>";
-                    str += "<td>";
-                    str += "<input type='text' id='writeword' name='writeword' value='"+value.writeword+"'  requiredlay-verify='required' autocomplete='off' class='layui-input'>"
-                    str += "</td>";
-                    str += "<td>";
-                    str += value.word;
-                    str += "</td>";
-                    // if(value.word==$("#writeword").val()){
-                    //     str += "<input type='text' id='isflag1' name='isflag1' value='1' requiredlay-verify='required' autocomplete='off' class='layui-input'>"
-                    // }else{
-                    //     str += "<input type='text' id='isflag2' name='isflag2' value='0' requiredlay-verify='required' autocomplete='off' class='layui-input'>"
-                    // }
-                    str += "</tr>";
+                   if(value.isyes==0){
+                       str += "<tr >";
+                       str += "<td style='color: red'>第";
+                       str += index+1;
+                       str += "题</td>";
+                       str += "<td>";
+                       str += value.wordmeaning;
+                       str += "</td>";
+                       str += "<td>";
+                       str += "<input type='text' id='writeword' name='writeword' disabled value='"+value.writeword+"'  requiredlay-verify='required' autocomplete='off' class='layui-input'>"
+                       str += "</td>";
+                       str += "<td>";
+                       str += value.word;
+                       str += "</td>";
+                       // if(value.word==$("#writeword").val()){
+                       //     str += "<input type='text' id='isflag1' name='isflag1' value='1' requiredlay-verify='required' autocomplete='off' class='layui-input'>"
+                       // }else{
+                       //     str += "<input type='text' id='isflag2' name='isflag2' value='0' requiredlay-verify='required' autocomplete='off' class='layui-input'>"
+                       // }
+                       str += "</tr>";
+                   }else{
+                       str += "<tr>";
+                       str += "<td>第";
+                       str += index+1;
+                       str += "题</td>";
+                       str += "<td>";
+                       str += value.wordmeaning;
+                       str += "</td>";
+                       str += "<td>";
+                       str += "<input type='text' id='writeword' name='writeword' disabled value='"+value.writeword+"'  requiredlay-verify='required' autocomplete='off' class='layui-input'>"
+                       str += "</td>";
+                       str += "<td>";
+                       str += value.word;
+                       str += "</td>";
+                       // if(value.word==$("#writeword").val()){
+                       //     str += "<input type='text' id='isflag1' name='isflag1' value='1' requiredlay-verify='required' autocomplete='off' class='layui-input'>"
+                       // }else{
+                       //     str += "<input type='text' id='isflag2' name='isflag2' value='0' requiredlay-verify='required' autocomplete='off' class='layui-input'>"
+                       // }
+                       str += "</tr>";
+                   }
+
 
                 });　　　　　　　//将拼接的内容放置内容显示区域
                 $("#tbody").html(str);
@@ -126,9 +210,22 @@
     }
     $("#but").click(function() {
         find();
+
     })
     $(document).ready(function() {
         find();
+        $("#btnSave").click(function () {
+            location.href="../user/main1";
+        })
+        // $('input[type=radio][name=isflag]').change(function() {
+        //     if (this.value == '') {
+        //         find();
+        //     }
+        //     else if (this.value == '1') {
+        //         find();
+        //     }
+        //     find();
+        // });
         });
 </script>
 </html>

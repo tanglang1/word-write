@@ -1,106 +1,236 @@
 <!DOCTYPE html>
 <html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>自测列表</title>
     <link rel="stylesheet"
           href="../../layuicms/layui/css/layui.css" >
     <script type="text/javascript"
             src="../../js/jquery-2.1.1.js" ></script>
     <script type="text/javascript"
             src="../../layuicms/layui/layui.js"></script>
+    <link rel="stylesheet" href="http://tiku.kgc.cn/resources/V11.8.0.2/css/ytk_css.css">
+    <link rel="stylesheet" type="text/css" href="http://tiku.kgc.cn/resources/V11.8.0.2/css/classranking.css">
+    <link rel="stylesheet" type="text/css" href="http://tiku.kgc.cn/resources/V11.8.0.2/css/yui3/grid.css">
+    <link rel="stylesheet" type="text/css" href="http://tiku.kgc.cn/resources/V11.8.0.2/css/themes.css">
+    <link rel="stylesheet" type="text/css" href="http://tiku.kgc.cn/resources/V11.8.0.2/css/style.css">
+    <link rel="stylesheet" type="text/css" href="http://tiku.kgc.cn/resources/V11.8.0.2/css/feedBack.css">
+    <link rel="icon" type="image/x-icon" href="http://tiku.kgc.cn/testing/favicon.ico">
+    <link type="text/css" rel="stylesheet" href="http://tiku.kgc.cn/resources/V11.8.0.2/js/laydate/need/laydate.css">
+    <link type="text/css" rel="stylesheet" href="http://tiku.kgc.cn/resources/V11.8.0.2/js/laydate/skins/default/laydate.css" id="LayDateSkin"></head>
+    <style type="text/css">
+        .comment_list {
+            padding-top:40px;
+            width:700px;
+            margin:0 auto;
+        }
+        .comment_details {
+            float:left;
+        }
+        .comment_content {
+            margin-top:10px;
+            font-size:16px;
+        }
+        .comment_add_or_last {
+
+            margin:0 auto;
+            clear: both;
+            width:600px;
+            height:40px;
+            background: #F0F0F0;
+            text-align: center;
+            line-height: 40px;   //行高（与div保持同高，垂直居中写法）
+        }
+        .imgdiv{
+            float:left;
+
+        }
+        .imgcss {
+            width:50px;
+            height:50px;
+            border-radius: 50%;
+        }
+        .comment_name {
+            margin-left:10px;
+            color:#3D9EEA;
+            font-size:15px;
+            font-weight: bolder;
+        }
+        .layui-icon {
+            font-size: 10px;
+            color: grey;
+        }
+        .del {
+            margin-left: 55px;
+        }
+        html{
+            height: 100%;
+        }
+
+        body{
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        header{
+            /* 我们希望 header 采用固定的高度，只占用必须的空间 */
+            /* 0 flex-grow, 0 flex-shrink, auto flex-basis */
+            flex: 0 0 auto;
+        }
+
+        .main-content{
+            /* 将 flex-grow 设置为1，该元素会占用全部可使用空间
+               而其他元素该属性值为0，因此不会得到多余的空间*/
+            /* 1 flex-grow, 0 flex-shrink, auto flex-basis */
+            flex: 1 0 auto;
+        }
+
+        footer{
+            /* 和 header 一样，footer 也采用固定高度*/
+            /* 0 flex-grow, 0 flex-shrink, auto flex-basis */
+            flex: 0 0 auto;
+        }
+    </style>
 </head>
 <body>
-<div class="layui-container">
-    <div class="layui-row">
-        <div class="layui-col-sm3">
-            <h1 style="text-align: center">默写题库</h1>
+<header id="basic-header">
+    <!-- header -->
+    <div class="header-content">
+        <div class="img-1"></div>
+        <div class="rec"></div>
+        <div class="text-1">题库</div>
+
+        <div class="right">
+            <a class="user-face"></a>
+            <a class="user-info" id="userName" th:text="${session.login}"></a>
+            <!-- <a class="user-info" id="userName">新建学员7</a> id="faceCollect" title="身份认证采集"  -->
+            <div class="esc">
+                <a href="../user/showLogin" title="">退出</a>
+            </div>
         </div>
     </div>
-    <div id="tbody">
+
+</header>
+<section class="main-content">
+<div class="layui-container">
+    <div class="comment_list">
+        <h2 >全部试题</h2>
+        <hr>
+        <div id="commentList">
+        </div>
     </div>
+    <div class="layui-fluid" id="LAY-component-timeline">
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card-footer" style="text-align: center;">
+                        <div id="pagination" ></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<input type="hidden" name="total" id="total" th:value="${total}">
+    <input type="hidden" name="pageNum" id="pageNum"  th:value="${pageNum}">
+    <input type="hidden" name="pageSize" id="pageSize"  th:value="${pageSize}">
+    <input type="hidden" name="feeds1" id="feeds1"  th:value="${feeds1}">
+    <style>
+        .layui-layedit {
+            border-width: 0px;
+            border-style: solid;
+            border-radius: 2px;
+        }
+    </style>
+
+    <script src="../../layuicms/layui/layui.all.js"></script>
+    <script>
+        $(function () {
+
+
+        })
+    </script>
 </div>
+</section>
+    <footer id="basicBottom" style='postion:fixed;bottom:0px;margin:0px;float:left;width:100%;'><p>©2019 单词默写考试网</p> </footer>
 </body>
 <script type="text/javascript">
-    //调用分页
-    // laypage.render({
-    //     elem: 'demo20'
-    //     ,count: 10
-    //     ,jump: function(obj,first){
-    //
-    //         if (!first) {
-    //             $.ajax({
-    //                 type : "post",
-    //                 url : "../teacher/addTeacher",
-    //                 data : {
-    //                     page:obj.cur()
-    //                 },
-    //                 dataType : "json",
-    //                 success : function(reqData) {
-    //                     var str = "";
-    //                     str+='<div class="layui-row layui-bg-gray" style="margin-top: 5px">'
-    //                     str+='<div class="layui-col-sm10" >'
-    //                     str+='  <h3 style="margin-top: 5px">201901920293020</h3>'
-    //                     str+='  <p style="margin-top: 5px">出题人<span>tanglang</span></p>'
-    //                     str+='</div>'
-    //                     str+='<div class="layui-col-sm2" >'
-    //                     str+='   <button class="layui-btn layui-btn-sm " id="btnSave" style="text-align: left;margin-top: 10px">开始考试 </button>'
-    //                     str+='  </div></div>'
-    //                 },
-    //                 error : function() {
-    //                     layer.msg('ajax执行错误！', {
-    //                         icon : 2,
-    //                         time : 1000
-    //                     });
-    //                 }
-    //             });
-    //
-    //         }
-    //
-    //     }
-    // });
-$(document).ready(function () {
-    $.ajax({
-        type : "post",
-        url : "../writea/question",
-        data : {
+    var totalData=0; //表格数据总数
 
-        },
-        dataType : "json",
-        success : function(reqData) {
-            var str = "";
-            $.each(reqData,function(index,value){
-                str+='<div class="layui-row layui-bg-gray" style="margin-top: 5px">'
-                str+='<div class="layui-col-sm10" >'
-                str+='  <h3 style="margin-top: 5px">'
-                str+=value.pnum
-                str+='</h3>'
-                str+='  <p style="margin-top: 5px">出题人:<span>'
-                str+=value.username
-                str+='</span>&nbsp;&nbsp;试卷日期:<span>'
-                str+=value.pdate
-                str+='</span></p></div>'
-                str+='<div class="layui-col-sm2" >'
-                str+='   <button class="layui-btn layui-btn-sm " id="btnSave" style="text-align: left;margin-top: 10px">开始考试 </button>'
-                str+='  </div></div>'
-            });
-            $("#tbody").html(str);
-            $("#btnSave").click(function() {
-                location.href="../writea/showExam"
-            })
-        },
-        error : function() {
-            layer.msg('ajax执行错误！', {
-                icon : 2,
-                time : 1000
-            });
+    var currentPage=1; //当前页数
+
+    var pageLimit=10; //每页显示数据条数
+
+    handleData(currentPage,pageLimit); //刚进页面初始化表格
+    topage(); //分页
+
+    function handleData(data1,data2){
+        $.ajax({
+            type:"post",
+            url:'showQuestion2',
+            data:{page:data1, pageSize:data2},
+            success:function(data){
+                // console.log(data)
+                var data1=JSON.parse(data);
+                totalData=data1.count;
+                dataList=data1.data;
+                renderData(dataList)
+            }
+        })
+    }
+
+    function renderData(data){                //渲染表格数据，获取datalist
+        var str="";         //以下是根据自己的需求将数据添加到页面中的方法
+        for(var i=0;i<data.length;i++){         //此处可以用foreach函数代替，更为简洁
+            str+='<div class="comment">';
+            str+= '<div class="conmment_details">';
+            str+='<span>试卷：</span></span><span class="comment_name" style="font-size: 22px" >'+data[i].pnum+'</span>';
+            str+='<div class="comment_content" ><span>出题时间：</span><span  style="margin-left: 10px">'+data[i].pdate+'</span>';
+            str+='<a class="layui-btn layui-btn-sm" href="../writea/examStart?pnum='+data[i].pnum+'" data-id="1" style="margin-left: 430px;" >开始考试</a>';
+            str+='</div>';
+            str+='<div >';
+            str+='<span>出题人：</span> <span style="margin-left: 10px;font-size: 12px" >'+data[i].username+'</span>';
+            str+='</div>';
+            str+='</div>';
+            str+='<hr>';
+            str+='</div>';
+            //按钮的data-id是为了获取当前行的id，定位此行，封装方法进行操作
         }
-    });
-})
-</script>
-<script type="text/javascript">
-    $(document).ready(function() {
+        $("#commentList").html(str);
+    }
 
-    })
+    function topage(){                                //分页操作
+        $.ajax({                                        //获取数据总数
+            type:"post",
+            url:'showQuestion2',
+            data:{page:currentPage, pageSize:pageLimit},
+            success:function(data){
+                totalData=10;
+                layui.use(['element','laypage', 'layer'], function(){
+                    var $ = layui.jquery;
+                    var element = layui.element;
+                    var laypage = layui.laypage
+                        ,layer = layui.layer;
+                    //总页数大于页码总数
+                    laypage.render({
+                        elem: 'pagination'
+                        ,count: totalData //数据总数
+                        ,limit:pageLimit
+                        ,jump: function(obj,first){
+                            //obj包含了当前分页的所有参数，比如：
+                            var curr=obj.curr;
+                            var limit=obj.limit;
+                            // console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
+                            // console.log(obj.limit); //得到每页显示的条数
+                            if(!first){
+                                handleData(curr,limit);
+                            }
+                        }
+                    });
+                })
+            }
+        })
+
+    }
 </script>
 </html>

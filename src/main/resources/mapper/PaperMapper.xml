@@ -4,8 +4,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.word.write.dao.PaperMapper">
     <insert id="addPaper" parameterType="Paper">
-        INSERT INTO `word_write`.`paper` (`pid`, `pnum`, `wordid`, `pdate`, `classid`, `username`)
-        VALUES (#{pid}, #{pnum}, #{wordid}, #{pdate}, #{classid}, #{username});
+        INSERT INTO `word_write`.`paper` (`pid`, `pnum`, `wordid`, `pdate`, `classid`, `username`, `isidentify`)
+        VALUES (#{pid}, #{pnum}, #{wordid}, #{pdate}, #{classid}, #{username}, #{isidentify});
     </insert>
 
     <update id="updPaper" parameterType="Paper">
@@ -26,6 +26,9 @@
         select COUNT(1) from paper p,worda w,stuclass s
         <where>
             p.wordid = w.wordid and p.classid = s.classid
+            <if test="isidentify!=null">
+                and p.isidentify=1
+            </if>
             <if test="pnum!=null">
                 and p.pnum like CONCAT('%',#{pnum},'%')
             </if>
@@ -44,6 +47,9 @@
         select p.*,w.*,s.* from paper p,worda w,stuclass s
         <where>
             p.wordid = w.wordid and p.classid = s.classid
+            <if test="isidentify!=null">
+                and p.isidentify=1
+            </if>
             <if test="pnum!=null">
                 and p.pnum like CONCAT('%',#{pnum},'%')
             </if>

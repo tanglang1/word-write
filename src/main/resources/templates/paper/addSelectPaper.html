@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.springframework.org/schema/jdbc">
 <head>
     <meta charset="UTF-8">
-    <title>查询试卷信息</title>
+    <title>添加试卷（选择单词）</title>
     <link rel="stylesheet"
           href="../../layuicms/layui/css/layui.css" >
     <script type="text/javascript"
@@ -19,7 +19,7 @@
         }
         .layui-input{
             height: 26px;
-            width: 270px;
+            width: 120px;
             border-radius:5px 5px 5px 5px;
         }
         .layui-form-label{
@@ -35,28 +35,21 @@
 <body>
 <br/>
 <div class="layui-fluid layui-form">
-    <div class="layui-row"id="aout" >
-        <div class="layui-col-sm2" >
-            <h3><img src="../../images/tit.png" />&nbsp;试卷管理</h3>
-        </div>
-        <div class="layui-col-sm4 layui-col-md-offset9">
-
-        </div>
-    </div>
     <div class="layui-row" >
         <div class="layui-col-sm12">
             <div class="demoTable">
                 <div class="layui-tab" >
                     <ul class="layui-tab-title">
-                        <li class="layui-this">普通查询</li>
+                        <li class="layui-this">选择十个单词</li>
                     </ul>
                     <div class="layui-tab-content">
                         <div class="layui-row" >
                             <div class="layui-col-sm3">
                                 <div class="layui-form-item">
-                                    <label class="layui-form-label">试卷号</label>
+                                    <label class="layui-form-label">试卷号<span style="color: red;">*</span></label>
                                     <div class="layui-input-block">
-                                        <input type="text" name="pnum" id="pnum" required  lay-verify="required" autocomplete="off" class="layui-input">
+                                        <input type="text" id="pnum" name="pnum" required
+                                               lay-verify="required" autocomplete="off" class="layui-input">
                                     </div>
                                 </div>
                             </div>
@@ -72,7 +65,7 @@
                                 <div class="layui-form-item">
                                     <label class="layui-form-label">考试班级<span style="color: red;">*</span></label>
                                     <div class="layui-input-block">
-                                        <select name="classid" id="classid" style="width: 60px"  lay-verify="required">
+                                        <select name="classid" id="classid"  lay-verify="required">
                                             <option value="">请选择</option>··
                                         </select>
                                     </div>
@@ -82,30 +75,24 @@
                         <div class="layui-row" >
                             <div class="layui-col-sm3">
                                 <div class="layui-inline">
-                                    <label class="layui-form-label">开始日期<span style="color: red;">*</span></label>
+                                    <label class="layui-form-label">考试日期</label>
                                     <div class="layui-input-inline">
-                                        <input type="text" id="pdateStart" name="pdateStart"  lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input" style="width: 270px;">
+                                        <input type="text" name="pdate" id="pdate" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
                                     </div>
                                 </div>
                             </div>
                             <div class="layui-col-sm3">
-                                <div class="layui-inline">
-                                    <label class="layui-form-label">结束日期<span style="color: red;">*</span></label>
-                                    <div class="layui-input-inline">
-                                        <input type="text" id="pdateEnd" name="pdateEnd"  lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input" style="width: 270px;">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">单词数<span style="color: red;">*</span></label>
+                                    <div class="layui-input-block">
+                                        <input type="text" id="wordCount" name="wordCount" required  disabled
+                                               lay-verify="required"  autocomplete="off" class="layui-input">
                                     </div>
                                 </div>
                             </div>
-                            <div class="layui-col-sm5 " style=" padding-left: 70px;">
-                                <button class="layui-btn layui-btn-sm" id="but" data-type="reload">
-                                    <i class="layui-icon layui-icon-search "></i>提交查询</button>
-<!--                                <button type="reset" id="rebut" class="layui-btn layui-btn-sm ">清空查询</button>-->
-                                <a id="btnAdd1" class="layui-btn layui-btn-sm" >
-                                    <i class="layui-icon layui-icon-add-1"></i>新增试卷(随机单词)
-                                </a>
-                                <a id="btnAdd2" class="layui-btn layui-btn-sm">
-                                    <i class="layui-icon layui-icon-add-1"></i>新增试卷(选择单词)
-                                </a>
+                            <div class="layui-col-sm3 " style=" padding-left: 70px;">
+                                <button class="layui-btn layui-btn-sm" id="butAdd" data-type="reload">
+                                    <i class="layui-icon layui-icon-add-1"></i>添加</button>
                             </div>
                         </div>
                     </div>
@@ -117,7 +104,7 @@
         <table id="rcved" lay-filter="rcved" class="layui-table"></table>
         <script type="text/html" id="barDemo">
             <a class="layui-btn  layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon">&#xe705;</i>查看</a>
-<!--            <a class="layui-btn layui-btn-xs" lay-event="edit"><i class="layui-icon">&#xe642;</i>修改</a>-->
+            <!--            <a class="layui-btn layui-btn-xs" lay-event="edit"><i class="layui-icon">&#xe642;</i>修改</a>-->
             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon">&#xe640;</i>删除</a>
         </script>
     </div>
@@ -127,9 +114,11 @@
     layui.use('table',function(){
         var laytable = layui.table,
             form = layui.form;
+        var $ = layui.jquery;
+        var layer = layui.layer;
         laytable.render({
             elem:'#rcved',
-            url:"../paper/findPaper?isidentify=1",
+            url:"../worda/findByTwo",
             method:"post",
             cellMinWidth: 80,
             width:"100%",
@@ -140,17 +129,61 @@
             // limits : [50,100,150,200], //数据分页条
             id:'testReload2',
             cols:[[
-                {field:"pid",title:"题目号", width:80,unresize: true,sort:true},
-                {field:"pnum",title:"试卷号", width:200,event:'setSing'},
-                {field:"word",title:"单词", width:120,event:'setSing'},
-                {field:"pdate",title:"试卷日期", width:120,event:'setSing'},
-                {field:"classname",title:"考试班级", width:120,event:'setSing'},
-                {field:"username",title:"出题人员", width:120,event:'setSing'},
-                {title:"操作",width: 240, align:'center', toolbar: '#barDemo',event:'setSing'}
-            ]],
-            done: function (res, curr, count) {
-            exportData=res.data;
-        }
+                {checkbox: true, fixed: true}
+                ,{field:'wordid', align:'center',title: '单词序号',  sort: true, fixed: true}
+                ,{field:'word', align:'center', title: '单词'}
+                ,{field:'wordmeaning', align:'center', title: '汉语意思'}
+            ]]
+        });
+        var wordid =[];
+        laytable.on('checkbox(rcved)', function(obj){
+            var data = obj.data; //获得当前行数据
+            wordid.push(data.wordid);
+            $("#wordCount").val(wordid.length);
+        });
+        $("#butAdd").click(function(){
+            console.log(wordid);
+            if($("#classid option:selected").val()==""){
+                layer.alert("请选择班级");
+                return;
+            }
+            if(wordid.length>10){
+                layer.alert("不能超过十个单词");
+            }else if(wordid.length<10){
+                layer.alert("不能低于十个单词");
+            }else{
+                //alert(wordid);
+                $.ajax({
+                    type:"post",
+                    url:"../paper/getaddPaper",
+                    data:{
+                        lengt:wordid.length,
+                        wordid1:JSON.stringify(wordid),
+                        pnum : $("#pnum").val(),
+                        classid:$("#classid").val(),
+                        pdate:$("#pdate").val(),
+                        username:$("#username").val()
+                    },
+                    dataType:"JSON",
+                    success:function(data){
+                        if(data>0){
+                            layer.msg('添加成功', {icon: 1,time: 1000},
+                                function(){
+                                    parent.location.reload();
+                                });
+                        }else {
+                            layer.msg('添加失败', {icon: 2,time: 1000},
+                                function(){
+
+                                });
+                        }
+                    },
+                    error:function(){
+                        layer.msg('ajax执行错误！', {icon: 2,time: 1000});
+                    }
+                });
+            }
+
         });
         var $=layui.$,active={
             reload:function(){
@@ -210,13 +243,13 @@
                 $("#pid").val(data.pid);
                 layer.open({
                     type: 2,
-                    title: '查看信息',
+                    title: '修改信息',
                     //maxmin: true, //最大最小窗口
                     offset: 'auto',//位置居中
                     //shadeClose: true, //点击遮罩关闭层
                     shade: 0,  //不显示遮罩
                     area:['1080px' , '800px'],
-                    content:'../paper/showDetailPaper?pnum='+data.pnum//弹框显示的url,对应的页面
+                    content:'../paper/showDetailPaper'//弹框显示的url,对应的页面
                 });
 
                 //同步更新缓存对应的值
@@ -228,7 +261,34 @@
         });
     });
 </script>
-
+<script type="text/javascript">
+    var myDate = new Date();
+    var year = myDate.getFullYear(); //获取完整的年份(4位,1970-????)
+    var month = myDate.getMonth() + 1; //获取当前月份(0-11,0代表1月)
+    var date = myDate.getDate(); //获取当前日(1-31)
+    var hours = myDate.getHours(); //获取当前小时数(0-23)
+    var min = myDate.getMinutes(); //获取当前分钟数(0-59)
+    var sec = myDate.getSeconds(); //获取当前秒数(0-59)
+    if (month < 10) {
+        month = "0" + month;
+    }
+    if (date < 10) {
+        date = "0" + date;
+    }
+    if (hours < 10) {
+        hours = "0" + hours;
+    }
+    if (min < 10) {
+        min = "0" + min;
+    }
+    if (sec < 10) {
+        sec = "0" + sec;
+    }
+    var riqi = year.toString() + month.toString() + date.toString()
+        + hours.toString() + min.toString() + sec.toString();
+    var pnum = riqi;
+    $("#pnum").val(pnum);//给文本框赋值
+</script>
 <script type="text/javascript" th:inline="none">
     $("document").ready(function(){
         $("#btnAdd1").click(function(){
@@ -267,14 +327,9 @@
             laydate = layui.laydate;
         //日期
         laydate.render({
-            elem: '#pdateStart',
-            type: 'date' //datetime
-
-        });
-        laydate.render({
-            elem: '#pdateEnd',
-            type: 'date' //datetime
-
+            elem: '#pdate',
+            type: 'date' ,//datetime
+            value:new Date()
         });
     });
 </script>

@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.springframework.org/schema/jdbc">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>查询分数信息</title>
     <link rel="stylesheet"
           href="../../layuicms/layui/css/layui.css" >
     <script type="text/javascript"
@@ -19,7 +19,7 @@
         }
         .layui-input{
             height: 26px;
-            width: 120px;
+            width: 270px;
             border-radius:5px 5px 5px 5px;
         }
         .layui-form-label{
@@ -40,9 +40,7 @@
             <h3><img src="../../images/tit.png" />&nbsp;分数管理</h3>
         </div>
         <div class="layui-col-sm1 layui-col-md-offset9">
-            <a id="btnAdd" class="layui-btn layui-btn-sm" style="margin-top: 8px;">
-                <i class="layui-icon layui-icon-add-1"></i>新增项目
-            </a>
+
         </div>
     </div>
     <div class="layui-row" >
@@ -64,9 +62,9 @@
                             </div>
                             <div class="layui-col-sm3">
                                 <div class="layui-form-item">
-                                    <label class="layui-form-label">是否发送给父母<span style="color: red;">*</span></label>
+                                    <label class="layui-form-label">是否发送<span style="color: red;">*</span></label>
                                     <div class="layui-input-block">
-                                        <input type="radio" name="isyes" value="1" title="是" checked>
+                                        <input type="radio" name="isyes" value="1" title="是">
                                         <input type="radio" name="isyes" value="0" title="否">
                                     </div>
                                 </div>
@@ -76,7 +74,7 @@
                                     <label class="layui-form-label">考试班级<span style="color: red;">*</span></label>
                                     <div class="layui-input-block">
                                         <select name="stuclass" id="stuclass"  lay-verify="required">
-                                            <option value="">请选择</option>··
+                                            <option value="" id="a">请选择</option>··
                                         </select>
                                     </div>
                                 </div>
@@ -102,7 +100,7 @@
                             <div class="layui-col-sm3 " style=" padding-left: 70px;">
                                 <button class="layui-btn layui-btn-sm" id="but" data-type="reload">
                                     <i class="layui-icon layui-icon-search "></i>提交查询</button>
-                                <button type="reset" id="rebut" class="layui-btn layui-btn-sm ">清空查询</button>
+<!--                                <button type="reset" id="rebut" class="layui-btn layui-btn-sm ">清空查询</button>-->
                             </div>
                         </div>
                     </div>
@@ -113,26 +111,34 @@
 
     <div class="layui-row">
         <table id="rcved" lay-filter="rcved" class="layui-table">
-            <script type="text/html" id="switchTpl">
-                <!-- 这里的 checked 的状态只是演示 -->
-                <input type="checkbox" name="isflag" value="{{d.id}}" lay-skin="switch" lay-text="s是|否" lay-filter="sexDemo" {{ d.id == 10003 ?  'checked' : '' }}>
-            </script>
-        </table>
 
+        </table>
+        <script type="text/html" id="switchTpl">
+            <!-- 这里的 checked 的状态只是演示 -->
+            <input type="checkbox" name="isflag" value="{{d.isflag}}"  lay-skin="switch" lay-text="已发|未发" lay-filter="sexDemo" {{ d.isflag == 1 ? 'checked' : '' }}>
+        </script>
         <script type="text/html" id="barDemo">
+            <a class="layui-btn layui-btn-xs" lay-event="send"><i class="layui-icon">&#xe641;</i>发送给家长</a>
             <a class="layui-btn layui-btn-xs" lay-event="edit"><i class="layui-icon">&#xe642;</i>修改</a>
             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon">&#xe640;</i>删除</a>
         </script>
+<!--        <input id="mid1" value="mid1" type="text">-->
     </div>
 </div>
 </body>
 <script type="text/javascript" th:inline="none">
     layui.use('table',function(){
         var laytable = layui.table,
-            form = layui.form;
+        form = layui.form;
         laytable.render({
             elem:'#rcved',
             url:"../mark/findMark",
+            toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+            ,defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+                title: '提示'
+                ,layEvent: 'LAYTABLE_TIPS'
+                ,icon: 'layui-icon-tips'
+            }],
             method:"post",
             cellMinWidth: 80,
             width:"100%",
@@ -141,18 +147,65 @@
             height:500,
             page : true,//开启分页
             size:'md',
-            limit : 2,//默认50条数据一页
+            limit : 10,//默认50条数据一页
             // limits : [50,100,150,200], //数据分页条
             id:'testReload2',
             cols:[[
-                {field:"mid",title:"分数序号", width:80,unresize: true,sort:true},
-                {field:"stuid",title:"学生名称", width:110,event:'setSing'},
-                {field:"stuclass",title:"学生班级", width:120,event:'setSing'},
-                {field:"mark",title:"学生分数", width:120,event:'setSing'},
-                {field:"markdate",title:"分数日期", width:120,event:'setSing'},
-                {field:'isflag', title:'是否发送给家长', width:250, templet: '#switchTpl', unresize: true},
-                {title:"操作",width: 240, align:'center', toolbar: '#barDemo',event:'setSing'}
-            ]]
+                {field:"mid",title:"分数序号", width:120,unresize: true,sort:true},
+                {field:"stuname",title:"学生名称", width:140,event:'setSing'},
+                {field:"classname",title:"学生班级", width:140,event:'setSing'},
+                {field:"mark",title:"学生分数", width:140,event:'setSing'},
+                {field:"parphone",title:"家长电话", width:200,event:'setSing'},
+                {field:"markdate",title:"分数日期", width:200,event:'setSing'},
+                {field:'isflag', title:'是否发送给家长', width:140, templet: '#switchTpl', unresize: true},
+                {title:"操作",width: 300, align:'center', toolbar: '#barDemo',event:'setSing'}
+            ]],
+            done: function (res, curr, count) {
+                form.on('switch(sexDemo)', function(obj){
+                    var contexts;
+                    var count=0;
+                    var x = obj.elem.checked;//判断开关状态
+                    if (x==true) {
+                        count=1;
+                        contexts = "请点击发送";
+                    } else {
+                        count=0;
+                        contexts = "你已发送";
+                    }
+                    layer.open({
+                        content: contexts
+                        , btn: ['确定', '取消']
+                        , yes: function (index, layero) {
+                            obj.elem.checked = x;
+                            if(count==1){
+
+                            }
+                            if(!x){
+                                obj.elem.checked = true;
+                            }else if(x){
+                                obj.elem.checked = false;
+                            }
+                            form.render();
+                            layer.close(index);
+                            //按钮【按钮一】的回调
+                        }
+                        , btn2: function (index, layero) {
+                            //按钮【按钮二】的回调
+                            obj.elem.checked = !x;
+                            form.render();
+                            layer.close(index);
+                            //return false //开启该代码可禁止点击该按钮关闭
+                        }
+                        , cancel: function () {
+                            //右上角关闭回调
+                            obj.elem.checked = !x;
+                            form.render();
+                            //return false 开启该代码可禁止点击该按钮关闭
+                        }
+                    });
+                    //layer.tips(this.value + ' ' + this.name + '：'+ obj.elem.checked, obj.othis);
+                });
+        },
         });
 
         var $=layui.$,active={
@@ -167,7 +220,7 @@
                         markDateStart:$('#markDateStart').val(),
                         markDateEnd:$('#markDateEnd').val(),
                         isflag:$("input[type='radio']:checked").val(),
-                        stuclass:$('#stuclass').val()
+                        stuclass:$("#classid option:selected").val()
                     }
                 });
             }
@@ -178,71 +231,13 @@
             active[type]?active[type].call(this) : '';
         });
         //监听操作
-        form.on('switch(sexDemo)', function(obj){
-            var contexts;
-            var count=0;
-            var x = obj.elem.checked;//判断开关状态
-            if (x==true) {
-                count=1;
-                contexts = "你确定要发送么";
-            } else {
-                contexts = "你已发送";
-            }
-            layer.open({
-                content: contexts
-                , btn: ['确定', '取消']
-                , yes: function (index, layero) {
-                    obj.elem.checked = x;
-                    if(count==1){
-                        $.ajax({
-                            type:"post",
-                            url:"../mark/sendMark",
-                            data:{
-                                mid:data.mid,
-                                isflag: 1
-                            },
-                            success:function(reqData){
-                                if(reqData>0){
-                                    layer.msg('发送成功', {icon: 1,time: 1000});
-                                }else {
-                                    layer.msg('发送失败', {icon: 2,time: 1000});
-                                }
-                            },
-                            error:function(){
-                                layer.msg('ajax执行错误！', {icon: 2,time: 1000});
-                            }
-                        });
 
-                    }
-                    if(!x){
-                        obj.elem.checked = true;
-                    }
-                    form.render();
-                    layer.close(index);
-                    //按钮【按钮一】的回调
-                }
-                , btn2: function (index, layero) {
-                    //按钮【按钮二】的回调
-                    obj.elem.checked = !x;
-                    form.render();
-                    layer.close(index);
-                    //return false //开启该代码可禁止点击该按钮关闭
-                }
-                , cancel: function () {
-                    //右上角关闭回调
-                    obj.elem.checked = !x;
-                    form.render();
-                    //return false 开启该代码可禁止点击该按钮关闭
-                }
-            });
-            //layer.tips(this.value + ' ' + this.name + '：'+ obj.elem.checked, obj.othis);
-        });
         //监听工具条
         laytable.on('tool(rcved)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
             var data = obj.data; //获得当前行数据
             var layEvent = obj.event;//获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
             var tr = obj.tr; //获得当前行 tr 的DOM对象
-
+            $("#mid1").val(data.mid);
             if(layEvent === 'del'){ //删除
                 layer.confirm('真的删除信息吗?', function(index){
                     $("#mid").val(data.mid);
@@ -285,6 +280,26 @@
                     username: '123'
                     ,title: 'xxx'
                 });
+            }else if(layEvent==="send"){
+                $.ajax({
+                    type:"post",
+                    url:"../mark/sendMark",
+                    data:{
+                        mid:data.mid,
+                        isflag: 1
+                    },
+                    success:function(reqData){
+                        if(reqData>0){
+                            layer.msg('发送成功', {icon: 1,time: 1000});
+                            location.reload();
+                        }else {
+                            layer.msg('发送失败', {icon: 2,time: 1000});
+                        }
+                    },
+                    error:function(){
+                        layer.msg('ajax执行错误！', {icon: 2,time: 1000});
+                    }
+                });
             }
         });
     });
@@ -325,6 +340,14 @@
     }
     $(document).ready(function(){
         upload1();
+        $("#rebut").click(function () {
+            $("#markDateStart").val("");
+            $("#markDateEnd").val("");
+            $("#pnum").val("");
+            $("input[type='radio']").val("")
+            $('#stuclass').val()
+            $("#a").selected()
+        })
     });
 </script>
 </html>

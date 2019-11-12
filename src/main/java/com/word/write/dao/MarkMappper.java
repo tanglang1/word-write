@@ -32,6 +32,6 @@ public interface MarkMappper {
     int updMark(Mark mark);
 
     int delMark(@Param("mid") Integer mid);
-    List<Student> findStudentByStuId(@Param("stuid") String stuid
+    Student findStudentByStuId(@Param("stuid") String stuid
             , @Param("stuclass") Integer stuclass);
 }

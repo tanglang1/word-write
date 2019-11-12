@@ -11,6 +11,10 @@ import com.aliyuncs.exceptions.ServerException;
 import com.aliyuncs.http.MethodType;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
+import org.apache.http.HttpResponse;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class Sendmss {
     //产品名称:云通信短信API产品,开发者无需替换
@@ -70,6 +74,37 @@ public class Sendmss {
         } catch (ServerException e) {
             e.printStackTrace();
         } catch (ClientException e) {
+            e.printStackTrace();
+        }
+    }
+    public void sendSms2(String phone, double mark ,String pnum) throws ClientException {
+        String host = "http://yzx.market.alicloudapi.com";
+        String path = "/yzx/sendSms";
+        String method = "POST";
+        String appcode = "4d36edf252b74346907960248112e29a";
+        Map<String, String> headers = new HashMap<String, String>();
+        //最后在header中的格式(中间是英文空格)为Authorization:APPCODE 83359fd73fe94948385f570e3c139105
+        headers.put("Authorization", "APPCODE " + appcode);
+        Map<String, String> querys = new HashMap<String, String>();
+        querys.put("mobile", phone);
+        querys.put("param", "code:"+pnum+",mark:"+mark+"");
+        querys.put("tpl_id", "TP19110522");
+        Map<String, String> bodys = new HashMap<String, String>();
+        try {
+            /**
+             * 重要提示如下:
+             * HttpUtils请从
+             * https://github.com/aliyun/api-gateway-demo-sign-java/blob/master/src/main/java/com/aliyun/api/gateway/demo/util/HttpUtils.java
+             * 下载
+             *
+             * 相应的依赖请参照
+             * https://github.com/aliyun/api-gateway-demo-sign-java/blob/master/pom.xml
+             */
+            HttpResponse response = HttpUtils.doPost(host, path, method, headers, querys, bodys);
+            System.out.println(response.toString());
+            //获取response的body
+            //System.out.println(EntityUtils.toString(response.getEntity()));
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

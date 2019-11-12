@@ -7,8 +7,16 @@ import org.apache.ibatis.annotations.Mapper;
 import java.util.List;
 
 public interface WriteaService {
-    List<Paper> findPaperByPnum(String pnum, Integer classid);
-
+    List<Paper> findPaperByPnum(Integer classid
+            ,int pageStart
+            ,int pageSize);
+    int findPaperByPnumCount(Integer classid);
+    List<Paper> findPaperHistory( Integer classid
+            ,String stuid
+            ,int pageStart
+            ,int pageSize);
+    int findPaperHistoryCount(Integer classid
+            , String stuid);
     List<Paper> showExam(String pnum, Integer classid);
 
     List<Writea> findWritea(Integer isyes
@@ -21,8 +29,9 @@ public interface WriteaService {
     );
 
     List<Writea> findWriteaByIsYes(Integer isyes
-            , String pnum
+            , String markdate
             , Integer stuclass
+            , Integer mid
             , String stuid
     );
 

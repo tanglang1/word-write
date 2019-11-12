@@ -1,12 +1,15 @@
-package com.word.write.controller;//package com.word.write.controller;
+package com.word.write.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.word.write.pojo.Mark;
 import com.word.write.pojo.Paper;
+import com.word.write.pojo.Statistics;
 import com.word.write.pojo.Writea;
 import com.word.write.service.MarkService;
+import com.word.write.service.StatisticsService;
 import com.word.write.service.WriteaService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -15,14 +18,16 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping("writea")
 public class WriteaController {
     @Resource
     private WriteaService writeaService;
+
+    @Resource
+    private StatisticsService statisticsService;
 
     @Resource
     private MarkService markService;
@@ -33,127 +38,175 @@ public class WriteaController {
     }
 
     @RequestMapping("examStart")
-    @ResponseBody
-    public String examStart(HttpServletRequest request) {
+    public String examStart(HttpServletRequest request, Model model,@RequestParam(value = "pnum", required = false) String pnum) {
         HttpSession session = request.getSession();
         Integer classid = (Integer) session.getAttribute("classid");
-        String pnum="20191006175835";
+        session.setAttribute("pnum",pnum);
+        System.err.println(pnum);
         List<Paper> list = writeaService.showExam(pnum,classid);
         session.setAttribute("listp",list);
-        String json = JSON.toJSONString(list);
-        return json;
+        int index=1;
+        model.addAttribute("index",index);
+        model.addAttribute("flag",0);
+        return "writea/examStart1";
     }
 
     @RequestMapping("finshiWritea")
-    @ResponseBody
-    public double finshiWritea(@RequestParam(value = "writeword1", required = false) String[] writeword1, HttpServletRequest request) {
+    public String finshiWritea(Model model, @RequestParam(value = "writeword[]", required = false) ArrayList<String> writeword, HttpServletRequest request) {
         HttpSession session = request.getSession();
-        System.out.println(session.getAttribute("listp"));
-        List<Paper> list = (List<Paper>) session.getAttribute("listp");
-        System.out.println(writeword1);
-        String j = writeword1.toString();
-        StringBuilder word = new StringBuilder();
-        for (String s : writeword1) {
-            word.append(s).append(",");
-        }
-        System.out.println(word.substring(0, word.lastIndexOf(",")));
-        word = new StringBuilder(word.substring(0, word.lastIndexOf(",")));
-        word = new StringBuilder(word.substring(word.indexOf("[") + 1, word.lastIndexOf("]")));
-        String[] array = word.toString().split(",");
-        String pnum = list.get(0).getPnum();
-        Integer stuclass = list.get(0).getClassid();
-        double mark1 = 0;
-
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        String word1=null;
+        String word2=null;
+        Paper paper=null;
+        Writea writea = null;
+        double mark1=0;
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String date = df.format(new Date());
-        String word1;
-        String word2;
-        Writea writea = new Writea();
-        System.out.println(list.size());
-        int flag = 1;
-        for (int i = 0; i < array.length; i++) {
-            for (int k = 0; k < list.size(); k++) {
-                word1 = list.get(i).getWord();
-                word2 = array[i].substring(1, array[i].lastIndexOf('"'));
-                System.err.println(word1);
-                System.out.println(word2);
-                if (word1.equals(word2)) {
+        Integer classid = (Integer) session.getAttribute("classid");
+        String stuid = (String)session.getAttribute("stuid");
+        String pnum = (String)session.getAttribute("pnum");
+        List<Paper> list = (List<Paper>) session.getAttribute("listp");
+        for (int i = 0; i <writeword.size() ; i++) {
+            System.err.println(writeword.get(i));
+        }
+        System.out.println("----------------------------");
+        for (int i = 0; i <list.size() ; i++) {
+            paper=list.get(i);
+            word2=paper.getWord();
+            System.err.println(word2);
+        }
+        Map<String,Object> map=new HashMap<>();
+        System.out.println(writeword);
+        for (int i = 0; i <writeword.size() ; i++) {
+            word1=writeword.get(i);
+            for (int j = 0; j <list.size() ; j++) {
+                paper=list.get(i);
+                word2=paper.getWord();
+                if(word1.equals(word2)){
+                    writea=new Writea();
+                    System.out.println("111111111111111");
                     writea.setIsyes(1);
                     writea.setPid(list.get(i).getPid());
                     writea.setWriteword(word2);
                     writea.setWritedate(date);
-                    writea.setStuid("22");
-                    writea.setStuclass(stuclass);
+                    writea.setStuid(stuid);
+                    writea.setStuclass(classid);
                     System.out.println(list.get(i).getClassid());
                     writea.setPnum(pnum);
-                    mark1 = mark1 + 4;
-                    flag = flag + 1;
+                    mark1 = mark1 + 10;
+                    writeaService.addWritea(writea);
                     System.out.println(mark1);
                     break;
-                } else {
+                }else {
+                    writea=new Writea();
+                    System.out.println("2222222222222222222222");
                     writea.setIsyes(0);
                     writea.setPid(list.get(i).getPid());
-                    writea.setWriteword(word2);
+                    writea.setWriteword(word1);
                     writea.setWritedate(date);
-                    writea.setStuid("22");
-                    writea.setStuclass(stuclass);
+                    writea.setStuid(stuid);
+                    writea.setStuclass(classid);
+                    System.out.println(list.get(i).getClassid());
                     writea.setPnum(pnum);
-                    System.out.println("---->" + list.get(i).getPnum());
-                    flag = flag + 1;
+                    writeaService.addWritea(writea);
+                    System.out.println(mark1);
                     break;
                 }
             }
-            if (flag == 1) {
-                writeaService.addWritea(writea);
-            }
-            System.out.println(array[i].substring(1, array[i].lastIndexOf('"')));
         }
         Mark mark = new Mark();
         mark.setIsflag(0);
         mark.setMark(mark1);
         mark.setMarkdate(date);
         mark.setPnum(pnum);
-        mark.setStuclass(stuclass);
-        mark.setStuid("22");
+        mark.setStuclass(classid);
+        mark.setStuid(stuid);
         markService.addMarkService(mark);
-        return mark1;
+        model.addAttribute("mark1",mark1);
+        model.addAttribute("flag",1);
+        Statistics statistics=new Statistics();
+        statistics.setNumber(10);
+        statistics.setSdate(date);
+        statisticsService.addStatistics(statistics);
+        return "writea/examStart1";
     }
 
     @RequestMapping("showQuestion")
-    public String showQuestion() {
-        return "writea/showQuestion";
-    }
-
-    @RequestMapping("question")
-    @ResponseBody
-    public String question(HttpServletRequest request){
+    public String showQuestion(HttpServletRequest request,
+             @RequestParam(value = "pageNum", defaultValue = "1", required = false) int pageNum,
+             @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
+            Model model){
         HttpSession session = request.getSession();
         Integer classid = (Integer) session.getAttribute("classid");
-        String pnum="20191006175835";
-        List<Paper> list=writeaService.findPaperByPnum(pnum,classid);
-        String json=JSON.toJSONString(list);
-        return json;
+        List<Paper> list=writeaService.findPaperByPnum(classid,pageNum-1,pageSize);
+        model.addAttribute("feeds", list);
+        model.addAttribute("total", list.size());
+        model.addAttribute("feeds1", JSON.toJSONString(list));
+        model.addAttribute("pageNum", pageNum-1);
+        model.addAttribute("pageSize", pageSize);
+        return "writea/showQuestion";
     }
-
-    @RequestMapping("historyWritea")
-    public String historayWritea() {
+    @RequestMapping("showQuestion1")
+    public String showQuestion1(HttpServletRequest request){
+        return "writea/showQuestion";
+    }
+    @RequestMapping("showQuestion2")
+    @ResponseBody
+    public String showQuestion2(HttpServletRequest request,
+                               @RequestParam(value = "page", defaultValue = "1", required = false) int page,
+                               @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
+                               Model model){
+        HttpSession session = request.getSession();
+        Integer classid = (Integer) session.getAttribute("classid");
+        int pageCount = (page - 1) * pageSize;
+        List<Paper> list=writeaService.findPaperByPnum(classid,pageCount,pageSize);
+        int count=writeaService.findPaperByPnumCount(classid);
+        String json=JSON.toJSONString(list);
+        return "{\"code\":0,\"msg\":\"\",\"count\":" + count + ",\"data\":"
+                + json + "}";
+    }
+    @RequestMapping("showHistoryWritea")
+    public String showHistoryWritea(HttpServletRequest request){
         return "writea/historyWritea";
     }
-
-    @RequestMapping("detailWritea")
-    public String detailWritea() {
-        return "writea/detailWritea";
+    @RequestMapping("historyWritea")
+    @ResponseBody
+    public String historyWritea(HttpServletRequest request,
+                                    @RequestParam(value = "page", defaultValue = "1", required = false) int page,
+                                    @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
+                                    Model model){
+        HttpSession session = request.getSession();
+        String stuid=(String) session.getAttribute("stuid");
+        Integer classid = (Integer) session.getAttribute("classid");
+        int pageCount = (page - 1) * pageSize;
+        System.out.println(pageCount);
+        List<Paper> list=writeaService.findPaperHistory(classid,stuid,pageCount,pageSize);
+        int count=writeaService.findPaperHistoryCount(classid,stuid);
+        String json=JSON.toJSONString(list);
+        return "{\"code\":0,\"msg\":\"\",\"count\":" + count + ",\"data\":"
+                + json + "}";
     }
 
+    @RequestMapping("showDetailQuestion")
+    public String showDetailQuestion(Model model,HttpServletRequest request
+            ,@RequestParam(value = "markdate", required = false) String markdate
+            ,@RequestParam(value = "mid", required = false) Integer mid) {
+        HttpSession session = request.getSession();
+        session.setAttribute("markdate",markdate);
+        session.setAttribute("mid",mid);
+        return "writea/detailWritea";
+    }
     @RequestMapping("detailQuestion")
     @ResponseBody
-    public String detailQuestion(HttpServletRequest request) {
+    public String detailQuestion(Model model,HttpServletRequest request
+            ,@RequestParam(value = "markdate", required = false) String markdate
+            ,@RequestParam(value = "isyes", required = false) Integer isyes
+            ,@RequestParam(value = "mid", required = false) Integer mid) {
         HttpSession session = request.getSession();
-        Integer classid = 1;
-        String pnum = "20191006175835";
-        String stuid = "22";
-        List<Writea> list = writeaService.findWriteaByIsYes(null, pnum, classid, stuid);
-        return JSON.toJSONString(list);
+        //.addAttribute("markdate",markdate);
+        Integer classid = (Integer)session.getAttribute("classid");
+        String stuid = (String)session.getAttribute("stuid");
+        List<Writea> listWritea = writeaService.findWriteaByIsYes(isyes, markdate, classid,mid, stuid);
+        return JSON.toJSONString(listWritea);
     }
 
 }

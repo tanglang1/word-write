@@ -13,10 +13,26 @@ import java.util.List;
 public class WriteaServiceImpl implements WriteaService {
     @Resource
     private WriteaMapper writeaMapper;
+
+
     @Override
-    public List<Paper> findPaperByPnum(String pnum,Integer classid) {
-        System.err.println(pnum+classid);
-        return writeaMapper.findPaperByPnum(pnum,classid);
+    public List<Paper> findPaperByPnum(Integer classid, int pageStart, int pageSize) {
+        return writeaMapper.findPaperByPnum(classid, pageStart, pageSize);
+    }
+
+    @Override
+    public int findPaperByPnumCount(Integer classid) {
+        return writeaMapper.findPaperByPnumCount(classid);
+    }
+
+    @Override
+    public List<Paper> findPaperHistory(Integer classid, String stuid, int pageStart, int pageSize) {
+        return writeaMapper.findPaperHistory(classid, stuid, pageStart, pageSize);
+    }
+
+    @Override
+    public int findPaperHistoryCount(Integer classid, String stuid) {
+        return writeaMapper.findPaperHistoryCount(classid, stuid);
     }
 
     @Override
@@ -30,8 +46,8 @@ public class WriteaServiceImpl implements WriteaService {
     }
 
     @Override
-    public List<Writea> findWriteaByIsYes(Integer isyes, String pnum, Integer stuclass, String stuid) {
-        return writeaMapper.findWriteaByIsYes(isyes, pnum, stuclass, stuid);
+    public List<Writea> findWriteaByIsYes(Integer isyes, String markdate, Integer stuclass,Integer mid, String stuid) {
+        return writeaMapper.findWriteaByIsYes(isyes, markdate, stuclass,mid, stuid);
     }
 
     @Override

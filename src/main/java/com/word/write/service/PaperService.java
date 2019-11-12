@@ -16,13 +16,15 @@ public interface PaperService {
             , String pdateStart
             , String pdateEnd
             , Integer classid
-            , String username);
+            , String username
+            ,Integer isidentify);
 
     List<Paper> findPaperService(String pnum
             , String pdateStart
             , String pdateEnd
             , Integer classid
             , String username
+            ,Integer isidentify
             , int pageStart
             , int pageSize);
 

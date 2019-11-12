@@ -61,7 +61,7 @@
                 <li class="layui-nav-item" th:if="${session.role==0}">
                     <a href="javascript:;">评测与考试</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="../paper/showFindPaper">试卷管理</a></dd>
+                        <dd><a href="../paper/showFindPaper" id="a1">试卷管理</a></dd>
                         <dd><a href="../mark/showFindMark">分数管理</a></dd>
                         <dd><a href="../worda/openFindWorda">单词管理</a></dd>
                     </dl>
@@ -69,8 +69,9 @@
                 <li class="layui-nav-item" th:if="${session.role==1}">
                     <a href="javascript:;">我的自测</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="../writea/showQuestion">自测列表</a></dd>
-                        <dd><a href="../writea/historyWritea">我的历史</a></dd>
+                        <dd><a href="../writea/showQuestion" id="a2">自测列表</a></dd>
+                        <dd><a href="../writea/showHistoryWritea">我的历史</a></dd>
+                        <dd><a href="../statistics/showBar_Simple">刷题统计</a></dd>
                     </dl>
                 </li>
 <!--                <li class="layui-nav-item"><a href="">云市场</a></li>-->
@@ -82,12 +83,15 @@
     <div class="layui-body">
         <!-- 内容主体区域 -->
 <!--        <div style="padding: 15px;"></div>-->
-        <iframe id="iframeMain" src="" style="width: 100%" height="100%"></iframe>
+
+        <iframe id="iframeMain" src="" width="100%" height="100%">
+
+        </iframe>
     </div>
 
     <div class="layui-footer">
         <!-- 底部固定区域 -->
-        © 底部固定区域
+        © 考试系统
     </div>
 </div>
 <script src="../src/layui.js"></script>

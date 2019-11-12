@@ -6,16 +6,16 @@ import com.word.write.pojo.StuClass;
 import com.word.write.service.PaperService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Controller
 @RequestMapping("paper")
@@ -29,6 +29,11 @@ public class PaperController {
         return "paper/findPaper";
     }
 
+    @RequestMapping("showDetailPaper")
+    public String showDetailPaper(Model model,@RequestParam(value = "pnum", required = false) String pnum) {
+        model.addAttribute("pnum",pnum);
+        return "paper/detailPaper";
+    }
     //查询数据
     @RequestMapping("findPaper")
     @ResponseBody
@@ -37,7 +42,12 @@ public class PaperController {
             , @RequestParam(value = "pdateStart", required = false) String pdateStart
             , @RequestParam(value = "pdateEnd", required = false) String pdateEnd
             , @RequestParam(value = "classid", required = false) Integer classid
-            , @RequestParam(value = "username", required = false) String username) {
+            , @RequestParam(value = "username", required = false) String username
+            , @RequestParam(value = "isidentify", required = false) Integer isidentify) {
+        if(pdateStart==""){
+            pdateStart=null;
+        }
+        System.out.println(isidentify);
         // 获取页面显示的条数
         int pageNum = Integer.parseInt(request.getParameter("limit")); //pageSize
         // 获取页面当前页
@@ -46,10 +56,9 @@ public class PaperController {
         // 假设每页显示条数为pageNum10条　当前页为第currPage3页　则(3-1)*10=20
         // sql 语句为　　select * from 表    where 条件   limit 20,10
         int pageCount = (currPage - 1) * pageNum;
-        List<Paper> list = paperService.findPaperService(pnum, pdateStart, pdateEnd, classid, username, pageCount, pageNum);
+        List<Paper> list = paperService.findPaperService(pnum, pdateStart, pdateEnd, classid, username,isidentify, pageCount, pageNum);
         String json = JSON.toJSONStringWithDateFormat(list, "YYYY-MM-DD");
-        int count = paperService.findPaperCountService(pnum, pdateStart, pdateEnd, classid, username);
-
+        int count = paperService.findPaperCountService(pnum, pdateStart, pdateEnd, classid, username,isidentify);
         return "{\"code\":0,\"msg\":\"\",\"count\":" + count + ",\"data\":"
                 + json + "}";
     }
@@ -80,26 +89,65 @@ public class PaperController {
     @ResponseBody
     public int addPaper(Paper paper, @RequestParam(value = "wordCount", required = false) int wordCount) {
         int i1 = 0;
+        int count=1;
         if (paper != null) {
             Random random = new Random();
             int num = paperService.findWordaCountService();
             Set<Integer> integerSet = new HashSet<>();
+            int num1=0;
             while (i1 < wordCount) {
-                if (integerSet.add(random.nextInt(num))) {
+                num1=random.nextInt(num);
+                if (integerSet.add(num1)&&num1!=0) {
                     i1++;
                 }
             }
             for (int value : integerSet) {
                 System.out.print(value + ",");
                 paper.setWordid(value);
-                System.out.println("444444444444444444444444");
-                i1 = paperService.addPaperService(paper);
+                if(count==1){
+                    paper.setIsidentify(1);
+                    i1 = paperService.addPaperService(paper);
+                    count=2;
+                }else{
+                    paper.setIsidentify(0);
+                    i1 = paperService.addPaperService(paper);
+                }
             }
         }
         System.out.println(i1);
         return i1;
     }
+    //展示添加页面
+    @RequestMapping("showGetaddPaper")
+    public String showGetaddPaper() {
+        return "paper/addSelectPaper";
+    }
+    @RequestMapping("/getaddPaper")
+    @ResponseBody
+    public String getaddPaper(Paper paper,
+                              @RequestParam(value = "lengt", required = false) int lengt,
+                              @RequestParam(value = "wordid1", required = false) String wordid1){
 
+        String hood=wordid1.substring(wordid1.indexOf("[")+1,wordid1.lastIndexOf("]"));
+        String[] leng=new String[lengt];
+        leng=hood.split(",");
+        int count=0;
+        int count1=1;
+        for(int i=0;i<leng.length;i++){
+            if(count1==1){
+                paper.setWordid(Integer.parseInt(leng[i]));
+                paper.setIsidentify(1);
+                count=paperService.addPaperService(paper);
+                count1=2;
+            }else{
+                paper.setWordid(Integer.parseInt(leng[i]));
+                paper.setIsidentify(0);
+                count=paperService.addPaperService(paper);
+            }
+        }
+        String json = JSON.toJSONString(count);
+        return json;
+    }
     //显示修改页面
     //根据id查询
     @RequestMapping("/showUpdPaper")

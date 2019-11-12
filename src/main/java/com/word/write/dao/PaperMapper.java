@@ -20,13 +20,15 @@ public interface PaperMapper {
             , @Param("pdateStart") String pdateStart
             , @Param("pdateEnd") String pdateEnd
             , @Param("classid") Integer classid
-            , @Param("username") String username);
+            , @Param("username") String username
+            , @Param("isidentify") Integer isidentify);
 
     List<Paper> findPaper(@Param("pnum") String pnum
             , @Param("pdateStart") String pdateStart
             , @Param("pdateEnd") String pdateEnd
             , @Param("classid") Integer classid
             , @Param("username") String username
+            , @Param("isidentify") Integer isidentify
             , @Param("pageStart") int pageStart
             , @Param("pageSize") int pageSize);
 

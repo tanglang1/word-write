@@ -20,7 +20,7 @@
         }
         .layui-input{
             height: 26px;
-            width: 120px;
+            width: 270px;
             border-radius:5px 5px 5px 5px;
         }
         .layui-form-label{
@@ -38,12 +38,10 @@
 <div class="layui-fluid layui-form">
     <div class="layui-row"id="aout" >
         <div class="layui-col-sm2" >
-            <h3><img src="static/images/tit.png" />&nbsp;班级管理</h3>
+            <h3><img src="../../images/tit.png" />&nbsp;班级管理</h3>
         </div>
         <div class="layui-col-sm1 layui-col-md-offset9">
-            <a id="btnAdd" class="layui-btn layui-btn-sm" style="margin-top: 8px;">
-                <i class="layui-icon layui-icon-add-1"></i>新增班级
-            </a>
+
         </div>
     </div>
     <div class="layui-row" >
@@ -66,7 +64,10 @@
                             <div class="layui-col-sm3 " style=" padding-left: 70px;">
                                 <button class="layui-btn layui-btn-sm" id="btnFind" data-type="reload">
                                     <i class="layui-icon layui-icon-search "></i>提交查询</button>
-                                <button type="reset" id="rebut" class="layui-btn layui-btn-sm ">清空查询</button>
+<!--                                <button type="reset" id="rebut" class="layui-btn layui-btn-sm ">清空查询</button>-->
+                                <a id="btnAdd" class="layui-btn layui-btn-sm">
+                                    <i class="layui-icon layui-icon-add-1"></i>新增班级
+                                </a>
                             </div>
 
                         </div>
@@ -92,6 +93,12 @@
         laytable.render({
             elem:'#rcved',
             url:"../stuClass/findByName",
+            toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+            ,defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+                title: '提示'
+                ,layEvent: 'LAYTABLE_TIPS'
+                ,icon: 'layui-icon-tips'
+            }],
             method:"post",
             height:500,
             page : true,//开启分页

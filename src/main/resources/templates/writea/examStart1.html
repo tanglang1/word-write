@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <html>
 <head>
     <meta http-equiv="content-type" content="text/html;charset=UTF-8">
@@ -15,142 +15,149 @@
             src="../../js/jquery-2.1.1.js" ></script>
     <script type="text/javascript"
             src="../../layuicms/layui/layui.js"></script>
+    <link rel="stylesheet" href="http://tiku.kgc.cn/resources/V11.8.0.2/css/ytk_css.css">
+    <link rel="stylesheet" type="text/css" href="http://tiku.kgc.cn/resources/V11.8.0.2/css/classranking.css">
+    <link rel="stylesheet" type="text/css" href="http://tiku.kgc.cn/resources/V11.8.0.2/css/yui3/grid.css">
+    <link rel="stylesheet" type="text/css" href="http://tiku.kgc.cn/resources/V11.8.0.2/css/themes.css">
+    <link rel="stylesheet" type="text/css" href="http://tiku.kgc.cn/resources/V11.8.0.2/css/style.css">
+    <link rel="stylesheet" type="text/css" href="http://tiku.kgc.cn/resources/V11.8.0.2/css/feedBack.css">
+    <link rel="icon" type="image/x-icon" href="http://tiku.kgc.cn/testing/favicon.ico">
+    <link type="text/css" rel="stylesheet" href="http://tiku.kgc.cn/resources/V11.8.0.2/js/laydate/need/laydate.css">
+    <link type="text/css" rel="stylesheet" href="http://tiku.kgc.cn/resources/V11.8.0.2/js/laydate/skins/default/laydate.css" id="LayDateSkin"></head>
     <style>
         .hasBeenAnswer {
             background: #5d9cec;
             color:#fff;
         }
+        html{
+            height: 100%;
+        }
 
+        body{
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        header{
+            /* 我们希望 header 采用固定的高度，只占用必须的空间 */
+            /* 0 flex-grow, 0 flex-shrink, auto flex-basis */
+            flex: 0 0 auto;
+        }
+
+        .main-content{
+            /* 将 flex-grow 设置为1，该元素会占用全部可使用空间
+               而其他元素该属性值为0，因此不会得到多余的空间*/
+            /* 1 flex-grow, 0 flex-shrink, auto flex-basis */
+            flex: 1 0 auto;
+        }
+
+        footer{
+            /* 和 header 一样，footer 也采用固定高度*/
+            /* 0 flex-grow, 0 flex-shrink, auto flex-basis */
+            flex: 0 0 auto;
+        }
     </style>
 </head>
 
 <body>
-<div class="main">
+<header id="basic-header">
+    <!-- header -->
+    <div class="header-content">
+        <div class="img-1"></div>
+        <div class="rec"></div>
+        <div class="text-1">题库</div>
+
+        <div class="right">
+            <a class="user-face"></a>
+            <a class="user-info" id="userName" th:text="${session.login}"></a>
+            <!-- <a class="user-info" id="userName">新建学员7</a> id="faceCollect" title="身份认证采集"  -->
+            <div class="esc">
+                <a href="../user/showLogin" title="">退出</a>
+            </div>
+        </div>
+    </div>
+
+</header>
+<section class="main main-content" style="margin-top:100px ">
     <!--nr start-->
     <div class="test_main">
         <div class="nr_left">
             <div class="test">
-                <form action="" method="post">
-                    <div class="test_title">
-                        <p class="test_time">
-                            <i class="icon iconfont">&#xe6fb;</i><b class="alt-1">01:40</b>
-                        </p>
-                        <font><input type="button" name="test_jiaojuan" value="交卷"></font>
-                    </div>
-
+                <form action="../writea/finshiWritea" method="post" id="formSubmit">
                     <div class="test_content">
                         <div class="test_content_title">
-                            <h2>单选题</h2>
+                            <h2>默写单词</h2>
                             <p>
-                                <span>共</span><i class="content_lit">60</i><span>题，</span><span>合计</span><i class="content_fs">60</i><span>分</span>
+                                <span>共</span><i class="content_lit">10</i><span>题，</span><span>合计</span><i class="content_fs">100</i><span>分</span>
                             </p>
                         </div>
                     </div>
-                    <div class="test_content_nr">
+                    <div class="test_content_nr"  th:each="wordList,userStat : ${session.listp}">
                         <ul>
-
-                            <li id="qu_0_0">
+                            <li th:id="'qu_0_'+${userStat.index}">
                                 <div class="test_content_nr_tt">
-                                    <i>1</i><span>(1分)</span><font>在生产管理信息系统中，下列操作步骤能正确将工单推进流程的是（  ）</font><b class="icon iconfont">&#xe881;</b>
+                                    <i th:text="${userStat.index+1}"></i><span>(1分)</span><font th:text="${wordList.wordmeaning}"></font><b class="icon iconfont">&#xe881;</b>
                                 </div>
-
                                 <div class="test_content_nr_main">
                                     <ul>
-
-                                        <li class="option">
-
-                                            <input type="radio" class="radioOrCheck" name="answer1"
-                                                   id="0_answer_1_option_1"
-                                            />
-
-
-                                            <label for="0_answer_1_option_1">
-                                                A.
-                                                <p class="ue" style="display: inline;">在工具栏中点击“workflow”标签</p>
+                                        <li class="option1">
+                                            <label th:for="'0_answer_1_option_'+${userStat.index+1}">
+                                                <input type="text" name="writeword[]" th:id="'0_answer_1_option_'+${userStat.index+1}" lay-verify="title" autocomplete="off" placeholder="请输入英文" class="layui-input">
                                             </label>
                                         </li>
-
-                                        <li class="option">
-
-                                            <input type="radio" class="radioOrCheck" name="answer1"
-                                                   id="0_answer_1_option_2"
-                                            />
-
-
-                                            <label for="0_answer_1_option_2">
-                                                B.
-                                                <p class="ue" style="display: inline;">在缺陷单界面中点击“推进流程”按钮</p>
-                                            </label>
-                                        </li>
-
-                                        <li class="option">
-
-                                            <input type="radio" class="radioOrCheck" name="answer1"
-                                                   id="0_answer_1_option_3"
-                                            />
-
-
-                                            <label for="0_answer_1_option_3">
-                                                C.
-                                                <p class="ue" style="display: inline;">在缺陷单界面中点击“提交”按钮</p>
-                                            </label>
-                                        </li>
-
-                                        <li class="option">
-
-                                            <input type="radio" class="radioOrCheck" name="answer1"
-                                                   id="0_answer_1_option_4"
-                                            />
-
-
-                                            <label for="0_answer_1_option_4">
-                                                D.
-                                                <p class="ue" style="display: inline;">后台启动流程推进</p>
-                                            </label>
-                                        </li>
-
                                     </ul>
                                 </div>
                             </li>
                         </ul>
                     </div>
-
                 </form>
             </div>
 
         </div>
-        <div class="nr_right">
-            <div class="nr_rt_main">
+        <div class="nr_right" >
+            <div class="nr_rt_main" >
                 <div class="rt_nr1">
-                    <div class="rt_nr1_title">
+                    <div class="rt_nr1_title" style="margin-top:100px ">
                         <h1>
                             <i class="icon iconfont">&#xe692;</i>答题卡
                         </h1>
                         <p class="test_time">
-                            <i class="icon iconfont">&#xe6fb;</i><b class="alt-1">01:40</b>
+                            <i class="icon iconfont">&#xe6fb;</i><b class="alt-1" id="endTime">00:10</b>
                         </p>
                     </div>
 
                     <div class="rt_content">
-                        <div class="rt_content_tt">
-                            <h2>单选题</h2>
+                        <div class="rt_content_tt" >
+                            <h2>单词默写</h2>
                             <p>
-                                <span>共</span><i class="content_lit">60</i><span>题</span>
+                                <span>共</span><i class="content_lit">10</i><span>题</span>
                             </p>
                         </div>
-                        <div class="rt_content_nr answerSheet">
-                            <ul>
-                                <li><a href="#qu_0_0">1</a></li>
+                        <div class="rt_content_nr answerSheet" >
+                            <ul  >
+                                <li th:each="wordList,userStat : ${session.listp}"><a th:href="'#qu_0_'+${userStat.index}" th:text="${userStat.index+1}">1</a></li>
                             </ul>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
     <!--nr end-->
-    <div class="foot"></div>
+    <div class="foot">
+        <div class="test_title" style=" flex: 0 0 auto;margin-bottom: 70px;margin-left: 360px">
+            <p class="test_time">
+                <i class="icon iconfont">&#xe6fb;</i><b class="alt-1">00:10</b>
+            </p>
+            <font><input type="button" name="test_jiaojuan" id="submit1" lay-submit lay-filter="formDemo" value="交卷"></font>
+        </div>
+    </div>
+</section>
+    <footer id="basicBottom" ><p>©2019 单词默写考试网</p>
+
+    </footer>
+    <input type="hidden" th:value="${mark1}" id="mark1">
+    <input type="hidden" th:value="${flag}" id="flag">
 </div>
 
 <script src="../../js/jquery-1.11.3.min.js"></script>
@@ -158,9 +165,9 @@
 <!--时间js-->
 <script src="../../time/jquery.countdown.js"></script>
 <script>
+    var layer = layui.layer;
     window.jQuery(function($) {
         "use strict";
-
         $('time').countDown({
             with_separators : false
         });
@@ -170,23 +177,59 @@
         $('.alt-2').countDown({
             css_class : 'countdown-alt-2'
         });
-
     });
-
-
+    layui.use('layer', function(){
+       layer = layui.layer;
+       showMark();
+    });
     $(function() {
-        $('li.option label').click(function() {
+        $('li.option1 label input').blur(function() {
             debugger;
-            var examId = $(this).closest('.test_content_nr_main').closest('li').attr('id'); // 得到题目ID
+            var examId = $(this).parent().closest('.test_content_nr_main').closest('li').attr('id'); // 得到题目ID
             var cardLi = $('a[href=#' + examId + ']'); // 根据题目ID找到对应答题卡
-            // 设置已答题
-            if(!cardLi.hasClass('hasBeenAnswer')){
-                cardLi.addClass('hasBeenAnswer');
+            if($(this).val()!=""){
+                // 设置已答题
+                if(!cardLi.hasClass('hasBeenAnswer')){
+                    cardLi.addClass('hasBeenAnswer');
+                }
             }
+            if($(this).val()==""){
+                if(cardLi.hasClass('hasBeenAnswer')){
+                    cardLi.removeClass('hasBeenAnswer');
+                }
+            }
+
+
+        });
+        var endTime=$("#endTime").text();
+        if(endTime=="00:00"){
+            $("form").submit();
+        }
+    });
+    $("#submit1").click(function () {
+        layer.confirm("请问是否交卷？", {
+            btn: ["确定","取消"]
+        }, function(index){
+            $("form").submit();
+        }, function(){
 
         });
     });
-</script>
-</body>
+   function showMark() {
+       var flag=$("#flag").val();
+       var mark1=$("#mark1").val();
+       if(flag==1){
+            //信息框-例1
+           layer.alert('你的分数为'+mark1+'分', {
+               skin: 'layui-layer-lan' //样式类名
+               ,closeBtn: 0
+           }, function(){
+               location.href="../user/main1";
+           });
+       }
+   }
 
+</script>
+
+</body>
 </html>

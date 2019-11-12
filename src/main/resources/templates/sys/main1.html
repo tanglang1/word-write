@@ -1,0 +1,388 @@
+
+<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <title>课工场题库</title>
+    <link rel="stylesheet" href="http://tiku.kgc.cn/resources/V11.8.0.2/css/ytk_css.css">
+    <link rel="stylesheet" type="text/css" href="http://tiku.kgc.cn/resources/V11.8.0.2/css/classranking.css">
+    <link rel="stylesheet" type="text/css" href="http://tiku.kgc.cn/resources/V11.8.0.2/css/yui3/grid.css">
+    <link rel="stylesheet" type="text/css" href="http://tiku.kgc.cn/resources/V11.8.0.2/css/themes.css">
+    <link rel="stylesheet" type="text/css" href="http://tiku.kgc.cn/resources/V11.8.0.2/css/style.css">
+    <link rel="stylesheet" type="text/css" href="http://tiku.kgc.cn/resources/V11.8.0.2/css/feedBack.css">
+    <link rel="icon" type="image/x-icon" href="http://tiku.kgc.cn/testing/favicon.ico">
+    <link type="text/css" rel="stylesheet" href="http://tiku.kgc.cn/resources/V11.8.0.2/js/laydate/need/laydate.css"><link type="text/css" rel="stylesheet" href="http://tiku.kgc.cn/resources/V11.8.0.2/js/laydate/skins/default/laydate.css" id="LayDateSkin"></head>
+<body>
+<!--<header id="basic-header">-->
+<!--    &lt;!&ndash; header &ndash;&gt;-->
+<!--    <div class="header-content">-->
+<!--        <div class="img-1"></div>-->
+<!--        <div class="rec"></div>-->
+<!--        <div class="text-1">题库</div>-->
+
+<!--        <div class="right">-->
+<!--            <a class="user-face"></a>-->
+<!--            <a class="user-info" id="userName" th:text="${session.login}"></a>-->
+<!--            &lt;!&ndash; <a class="user-info" id="userName">新建学员7</a> id="faceCollect" title="身份认证采集"  &ndash;&gt;-->
+<!--            <div class="esc">-->
+<!--                <a href="../user/showLogin" title="">退出</a>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--</header>-->
+<div id="basicTop" style="margin-top:70px;"></div>
+<div>
+    <div class="classranking_box">
+        <!--分类测评-->
+        <div class="wrapper">
+
+            <h3 class="test_title divide_type">本日答题</h3>
+            <div id="dayTest-box">
+                <div class="dayTest-list test-over" id="normalDiv" style="display:none;">
+                    <div class="test-overList test-overItem1">
+                        <span class="test-overImg"></span>累计答题数：<span class="test-overNum" id="questionCount">0</span>
+                    </div>
+                    <div class="test-overList test-overItem2" th:if="${num==1}">
+                        <span class="test-overImg"></span>答题数：<span class="test-overNum" id="actualQuestionCount" th:text="${sum}"></span>
+                    </div>
+                    <div class="test-overList test-overItem3">
+                        <span class="test-overImg"></span>正确率：<span class="test-overNum" id="correctRate">0</span>
+                    </div>
+                </div>
+                <div class="dayTest-list test-nocount" id="nocountDiv" style="display:block" th:if="${num==0}">
+                    <span class="test-nocountImg"></span>今天还没有做题哟~加油！
+                </div>
+                <div class="dayTest-list test-nocount" id="nocountDiv1" style="display:block" th:if="${num==1}">
+                    <span class="test-overImg"></span>你今日的答题数：<span class="test-overNum" id="actualQuestionCount1" th:text="${sum}"></span>
+                </div>
+                <div class="dayTest-list test-failure" id="failureDiv" style="display:none;">
+                    获取数据失败，请刷新重新尝试！<span class="test-failureImg"></span>
+                </div>
+                <div class="dayTest-list test-failure" id="failureDivLoading" style="display:none;">
+                    数据加载中，请稍后......
+                </div>
+            </div>
+
+            <div class="test_box" style="height: 230px">
+
+                <h3 class="test_title divide_type">测试与统计</h3>
+                <div class="test_list_box">
+                    <!--         	 0.课程复习数量，1，模拟真题型数量，2，专项技能型数量 -->
+                    <div class="test_list item1">
+                        <span class="test_list_img skill_test_img"></span>
+                        <span class="test_list_name">自测题库<img src="http://tiku.kgc.cn/resources/V11.8.0.2/images/pc.png" title="可以选取试卷进行评测"></span>
+                        <!--                        <span class="test_list_order">完成25道题</span>-->
+                        <span class="test_list_go">
+							 <a id="a_skill" class="courseexam goto_test" href="../writea/showQuestion">进入</a>
+							 </span>
+                    </div>
+                    <!--         	 0.课程复习数量，1，模拟真题型数量，2，专项技能型数量 -->
+                    <div class="test_list item2">
+                        <span class="test_list_img class_test_img"></span>
+                        <span class="test_list_name">历史题库<img src="http://tiku.kgc.cn/resources/V11.8.0.2/images/pc.png" title="历史题库"></span>
+                        <!--                        <span class="test_list_order">完成40道题</span>-->
+                        <span class="test_list_go">
+							 <a class="courseexam goto_test" href="../writea/showHistoryWritea">进入</a>
+						     </span>
+                    </div>
+                    <!--         	 0.课程复习数量，1，模拟真题型数量，2，专项技能型数量 -->
+                    <div class="test_list item3">
+                        <span class="test_list_img imitate_test_img"></span>
+                        <span class="test_list_name">统计<img src="http://tiku.kgc.cn/resources/V11.8.0.2/images/pc.png" title="统计"></span>
+                        <!--                        <span class="test_list_order">完成6485道题</span>-->
+                        <span class="test_list_go">
+							 <a id="testDialogData" class="goto_test" href="../statistics/showBar_Simple">进入</a>
+						     </span>
+                    </div>
+                </div>
+
+            </div>
+            <div id="computerDiv" style="width:950px;margin-bottom:20px;">
+                <iframe frameborder="0" scrolling="no" id="computerFrame" width="100%" name="computerFrame" src="cid:frame-9EB1AA80CFD9444E5B31D162144189AA@mhtml.blink" style="border-style:none;" height="330"></iframe>
+            </div>
+
+            <!--            <div class="problem_record">-->
+            <!--                <h3 class="record_title divide_type">做题数量分析</h3>-->
+            <!--                <div class="data_sheet_box">-->
+            <!--                    <h3 class="data_sheet_title">您最近三个月做题<span>3450</span>道，完成题目数量具体时间分布如下：</h3>-->
+            <!--                    &lt;!&ndash;数据表站位&ndash;&gt;-->
+            <!--                    <div class="data_sheet_content">-->
+            <!--                        <img alt="" src="http://tiku.kgc.cn/testing/getBarChartImage">-->
+            <!--                    </div>-->
+            <!--                    &lt;!&ndash;日期站位&ndash;&gt;-->
+            <!--&lt;!&ndash;                    <div class="screen_time">&ndash;&gt;-->
+            <!--&lt;!&ndash;                        按时间查找:&ndash;&gt;-->
+            <!--&lt;!&ndash;                        <input id="searchStartDate" class="laydate-icon" type="text" style="width:120px">&ndash;&gt;-->
+            <!--&lt;!&ndash;                        至&ndash;&gt;-->
+            <!--&lt;!&ndash;                        <input id="searchEndDate" class="laydate-icon" type="text" style="width:120px">&ndash;&gt;-->
+            <!--&lt;!&ndash;                        <input type="button" style="width: 40px; height: 25px;border:none;background:#A0C001;color:#fff;outline:none;cursor:pointer;" value="Go">&ndash;&gt;-->
+            <!--&lt;!&ndash;                        <span id="searchResult"></span>&ndash;&gt;-->
+            <!--&lt;!&ndash;                    </div>&ndash;&gt;-->
+            <!--                </div>-->
+            <!--            </div>-->
+            <!--            <div class="pc-box pc-wrap">-->
+            <!--                <div class="pc-tab clear">-->
+            <!--                    <span class="tab-on" name="pc-1" id="skillSpan">按技能点分析</span>-->
+            <!--                    <span class="tab-1 tab-left" name="pc-2">按课程分析</span>-->
+            <!--                    <span class="tab-2 " name="pc-3">模拟自测分析</span>-->
+            <!--                </div>-->
+            <!--                <div class="pc-tabcon">-->
+            <!--                    &lt;!&ndash;技能点分析&ndash;&gt;-->
+
+            <!--&lt;!&ndash;                    <div class="pc-1">&ndash;&gt;-->
+            <!--&lt;!&ndash;                        <div class="pc-choose clear">&ndash;&gt;-->
+            <!--&lt;!&ndash;                            <label>按课程筛选</label>&ndash;&gt;-->
+            <!--&lt;!&ndash;                            <div class="select-box">&ndash;&gt;-->
+            <!--&lt;!&ndash;                                <select id="coursewareId">&ndash;&gt;-->
+            <!--&lt;!&ndash;                                    <option value="">不区分</option>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                    <option value="3561">用SSM框架开发企业级应用</option><option value="3562">基于SSH框架的企业级应用</option><option value="3563">Hadoop的大数据解决方案</option><option value="3564">Web前端框架与移动应用</option></select>&ndash;&gt;-->
+            <!--&lt;!&ndash;                            </div>&ndash;&gt;-->
+            <!--&lt;!&ndash;                            <label>时间</label>&ndash;&gt;-->
+            <!--&lt;!&ndash;                            <div class="select-box">&ndash;&gt;-->
+            <!--&lt;!&ndash;                                <select id="monthOrWeek">&ndash;&gt;-->
+            <!--&lt;!&ndash;                                    <option value="week" selected="selected">最近一周</option>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                    <option value="month">最近一月</option>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                </select>&ndash;&gt;-->
+            <!--&lt;!&ndash;                            </div>&ndash;&gt;-->
+            <!--&lt;!&ndash;                        </div>&ndash;&gt;-->
+            <!--&lt;!&ndash;                        <div class="select-show">&ndash;&gt;-->
+            <!--&lt;!&ndash;                            <table border="0" cellspacing="0" width="100%" id="skillTable" style="display: none;">&ndash;&gt;-->
+            <!--&lt;!&ndash;                                <tbody><tr>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                    <th width="10%">序号</th>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                    <th width="35%">技能点</th>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                    <th width="13%">答题数量</th>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                    <th width="15%">平均正确率</th>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                    <th width="17%">&nbsp;</th>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                </tr>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                </tbody></table>&ndash;&gt;-->
+            <!--&lt;!&ndash;                            <div class="show-btm" style="display: none;">&ndash;&gt;-->
+            <!--&lt;!&ndash;                                <p class="show-left">共包含&ndash;&gt;-->
+            <!--&lt;!&ndash;                                    <span id="totalCount"></span>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                    技能点</p>&ndash;&gt;-->
+
+            <!--&lt;!&ndash;                                <a class="hover-on" data="1" id="startItemNum">首页</a>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                <a class="hover-on" data="1" id="prePage">上页</a>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                &lt;!&ndash; 						<a href="javascript:refreshSkillRecord($('#currPage').attr('data'))" class="hover-on" data="1"  id="currPage">当前页</a> &ndash;&gt;&ndash;&gt;-->
+            <!--&lt;!&ndash;                                <a class="hover-on" data="1" id="nextPage">下页</a>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                <a class="hover-on" data="1" id="totalPage">尾页</a>&ndash;&gt;-->
+            <!--&lt;!&ndash;                            </div>&ndash;&gt;-->
+            <!--&lt;!&ndash;                            <div id="jinengList"><div style="padding-left: 250px;padding-top: 50px;font-size: 16px;">没有符合条件的数据！</div></div>&ndash;&gt;-->
+            <!--&lt;!&ndash;                        </div>&ndash;&gt;-->
+            <!--&lt;!&ndash;                    </div>&ndash;&gt;-->
+            <!--&lt;!&ndash;                    &lt;!&ndash;课程分析&ndash;&gt;&ndash;&gt;-->
+            <!--&lt;!&ndash;                    <div class="pc-2 hide">&ndash;&gt;-->
+            <!--&lt;!&ndash;                        <div class="pc-course clear">&ndash;&gt;-->
+            <!--&lt;!&ndash;                            <img src="http://tiku.kgc.cn/resources/V11.8.0.2/images/pc-1.gif">&ndash;&gt;-->
+            <!--&lt;!&ndash;                            <div class="pc-info" id="courseDescription">您最近没有完成任何课程复习型试卷，如果已经学完了某些课程，建议您选择该课程进行测试。</div>&ndash;&gt;-->
+            <!--&lt;!&ndash;                        </div>&ndash;&gt;-->
+            <!--&lt;!&ndash;                        <div class="pc-choose clear">&ndash;&gt;-->
+            <!--&lt;!&ndash;                            <label>时间</label>&ndash;&gt;-->
+            <!--&lt;!&ndash;                            <div class="select-box">&ndash;&gt;-->
+            <!--&lt;!&ndash;                                <select id="monthOrWeekForCourse">&ndash;&gt;-->
+            <!--&lt;!&ndash;                                    <option value="week" selected="selected">最近一周</option>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                    <option value="month">最近一月</option>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                </select>&ndash;&gt;-->
+            <!--&lt;!&ndash;                            </div>&ndash;&gt;-->
+            <!--&lt;!&ndash;                        </div>&ndash;&gt;-->
+            <!--&lt;!&ndash;                        <div class="select-show">&ndash;&gt;-->
+            <!--&lt;!&ndash;                            <table border="0" cellspacing="0" width="100%" id="courseTable">&ndash;&gt;-->
+            <!--&lt;!&ndash;                                <tbody><tr>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                    <th width="10%">序号</th>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                    <th width="24%">课程</th>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                    <th width="12%">答题套数</th>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                    <th width="12%">答题数</th>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                    <th width="15%">平均正确率</th>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                    <th width="17%">&nbsp;</th>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                </tr>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                <tr><td>1</td><td>用SSM框架开发企业级应用</td><td>0</td><td>0</td><td>  &#45;&#45;</td><td> <a href="http://tiku.kgc.cn/testing/exam/random/fuxiAuto/1024001001">开始测试</a> </td></tr><tr><td>2</td><td>基于SSH框架的企业级应用</td><td>0</td><td>0</td><td>  &#45;&#45;</td><td> <a href="http://tiku.kgc.cn/testing/exam/random/fuxiAuto/1024001002">开始测试</a> </td></tr><tr><td>3</td><td>Hadoop的大数据解决方案</td><td>0</td><td>0</td><td>  &#45;&#45;</td><td> <a href="http://tiku.kgc.cn/testing/exam/random/fuxiAuto/1024001003">开始测试</a> </td></tr><tr><td>4</td><td>Web前端框架与移动应用</td><td>0</td><td>0</td><td>  &#45;&#45;</td><td> <a href="http://tiku.kgc.cn/testing/exam/random/fuxiAuto/1024001004">开始测试</a> </td></tr></tbody></table>&ndash;&gt;-->
+            <!--&lt;!&ndash;                        </div>&ndash;&gt;-->
+            <!--&lt;!&ndash;                    </div>&ndash;&gt;-->
+            <!--                    &lt;!&ndash;模拟自测&ndash;&gt;-->
+
+            <!--&lt;!&ndash;                    <div class="pc-3 hide">&ndash;&gt;-->
+            <!--&lt;!&ndash;                        <div class="pc-course clear">&ndash;&gt;-->
+            <!--&lt;!&ndash;                            <img src="http://tiku.kgc.cn/resources/V11.8.0.2/images/pc-2.gif">&ndash;&gt;-->
+            <!--&lt;!&ndash;                            <div class="pc-info">&ndash;&gt;-->
+
+            <!--&lt;!&ndash;                                您已经完成<span class="black">147次</span>模拟结业测试，最近<span class="black">3次</span>平均成绩是<span class="red">65分</span>，<br>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                &lt;!&ndash;建议您再进行几次模拟测试，将平均分提升到70分以上，确保正式结业考试顺利通过！&ndash;&gt;&ndash;&gt;-->
+            <!--&lt;!&ndash;                                <div class="select-show">&ndash;&gt;-->
+            <!--&lt;!&ndash;                                    <a id="testDialogData1">继续测试 &gt;</a>&ndash;&gt;-->
+            <!--&lt;!&ndash;                                </div>&ndash;&gt;-->
+            <!--&lt;!&ndash;                            </div>&ndash;&gt;-->
+            <!--&lt;!&ndash;                        </div>&ndash;&gt;-->
+            <!--&lt;!&ndash;                        <div class="pc-wrap">&ndash;&gt;-->
+            <!--&lt;!&ndash;                            <p class="zc-tip" style="font-size: 15px;margin-bottom:25px;padding-left: 10px">各次模拟测试的具体成绩分布如下：</p>&ndash;&gt;-->
+            <!--&lt;!&ndash;                            <img alt="" src="http://tiku.kgc.cn/testing/getLineChartImage">&ndash;&gt;-->
+            <!--&lt;!&ndash;                            <div class="end-chart"></div>&ndash;&gt;-->
+            <!--&lt;!&ndash;                        </div>&ndash;&gt;-->
+            <!--&lt;!&ndash;                    </div>&ndash;&gt;-->
+            <!--                </div>-->
+            <!--            </div>-->
+            <!--        </div>-->
+            <!--    </div>-->
+            <!-- content -->
+            <!--     <div id="indialog" class="font-yahei hide"></div> -->
+            <!-- 开始测试弹出框 -->
+            <!--    <div id="testDialog" class="sub-bd" style="z-index: 10000;">-->
+            <!--        <div class="dialog-top white"><span class="left">提示</span></div>-->
+            <!--        <div class="dialog-body">-->
+            <!--            <div class="tisi f16 acenter">准备好了么，一旦开始考试系统将为您计时!</div>-->
+            <!--        </div>-->
+            <!--        <div class="dialog-bottom">-->
+            <!--            <a id="closeBtn" title="" class="blue-bg left">让我再想想</a>-->
+            <!--            <a id="continueBtn" title="" class="blue-bg right">开始考试</a>-->
+            <!--        </div>-->
+            <!--    </div>-->
+        </div>
+        <!--     公告 -->
+        <!--<div class="mask"></div>-->
+        <!--<div class="dialog" id="dialogs">-->
+        <!--    <div id="notice">-->
+        <!--        <h1>公告</h1>-->
+        <!--        <div class="contentA">-->
+        <!--            <h2 id="announcementTitle"></h2>-->
+        <!--            <article id="announcemetnContent">-->
+
+        <!--            </article>-->
+        <!--            <div style="text-align: center;"><input type="button" value="关闭（5秒）" id="closeBtnA"></div>-->
+        <!--        </div>-->
+        <!--    </div>-->
+        <!--</div>-->
+        <!--<div id="fullAlertDialog">-->
+        <!--    <div class="dialog-top white">-->
+        <!--        <span class="left">提示</span>-->
+        <!--    </div>-->
+        <!--    <div class="dialog-body" style="font-size: 17px;">-->
+        <!--        <div class="tisi acenter strong">做题进度达到100%后继续做题，进度将从0%重新计算，历史做题记录保留。</div>-->
+        <!--    </div>-->
+        <!--    <div class="dialog-bottom" align="center">-->
+        <!--        <a id="fullEnterBtn" class="blue-bg" style="left: 100px;">确定</a>-->
+        <!--        &lt;!&ndash; <a id="fullCloseBtn" href="javascript:void(0);" class="blue-bg right">取消</a> &ndash;&gt;-->
+        <!--    </div>-->
+        <!--</div>-->
+
+
+
+
+
+        <!-- <section>
+        <div class="section-content">
+        <h3>欢迎来到课工场题库123 </h3>
+        <p>在正式开始评测之旅前，请选择您的课程！</p>
+            <ul class="section-select">
+                <li>H5前端开发基础</li>
+                <li>H5前端开发基础</li>
+                <li>H5前端开发基础</li>
+            </ul>
+            <p>如果这里没有您关注的技术，您可以到<a href="">试题广场</a>看看！</p>
+            <a  href="">选好啦！进入题库</a>
+        </div>
+        </section> -->
+        <!-- footer -->
+        <footer id="basicBottom"><p>©2019 单词默写考试网</p> </footer>
+        <!--   正在测试页面不显示继续答题 -->
+<!--        <a class="continue-btn" id="continue" data="1" style="position: fixed; left: 1267.5px; top: 370px; display: none;">继续答题</a>-->
+
+
+<!--        &lt;!&ndash;<a class="again-btn" id="againExam" style="position: fixed; left: 1267.5px; top: 370px; display: block;">再来一套</a>&ndash;&gt;-->
+<!--        &lt;!&ndash;<a class="suggest-btn" id="suggest" style="position: fixed; left: 1267.5px; top: 450px;">建议</a>&ndash;&gt;-->
+
+<!--        <div id="yl005UserType" style="display:none;">1</div>-->
+<!--        &lt;!&ndash; footer &ndash;&gt;-->
+<!--        &lt;!&ndash; 回到顶部 &ndash;&gt;-->
+<!--        <a id="backTop" title="回顶部" class="top-img" style="display: none; position: fixed; left: 1275.5px; top: 607px;"><span>回顶部</span></a>-->
+<!--        &lt;!&ndash; 反馈建议&ndash;&gt;-->
+<!--        &lt;!&ndash;<div id="feedbackDialog" style="height: 550px; width: 700px; z-index: 10000;">&ndash;&gt;-->
+<!--        &lt;!&ndash;    <div class="dialog-top grays" style="font-size: 18px; padding-left: 10px; text-align: left center;" align="left">&ndash;&gt;-->
+<!--        &lt;!&ndash;        反馈建议&ndash;&gt;-->
+<!--        &lt;!&ndash;    </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;    <div class="dialog-body">&ndash;&gt;-->
+<!--        &lt;!&ndash;        <div style="width: 95%">&ndash;&gt;-->
+<!--        &lt;!&ndash;            <div style="font-size: 14px;padding: 10px;">关于课工场题库的任何问题和建议，欢迎在这里吐槽！&ndash;&gt;-->
+<!--        &lt;!&ndash;                <a href="http://tiku.kgc.cn/testing/announcementPage?currentPage=1&amp;tabPage=2" title="" class="blue" style="text-decoration: underline;float: right;">我提交过的反馈</a>&ndash;&gt;-->
+<!--        &lt;!&ndash;            </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;            <div style="font-size: 14px;padding: 10px;vertical-align:top;line-height: 30px;">&ndash;&gt;-->
+<!--        &lt;!&ndash;                标    题：<textarea id="feedbackTitle" rows="3" cols="80" style="width: 87%;height:60px;vertical-align: top;resize:none;" maxlength="80"></textarea><br>&ndash;&gt;-->
+<!--        &lt;!&ndash;                &lt;!&ndash; <input type="text" id="feedbackTitle" style="width: 87%;height:35px;" onkeyup="subFeedBackTitle(this,80);" maxlength="80"/><br/> &ndash;&gt;&ndash;&gt;-->
+<!--        &lt;!&ndash;                <span class="input-tips">请输入标题，80个字以内</span>&ndash;&gt;-->
+<!--        &lt;!&ndash;                <br>&ndash;&gt;-->
+<!--        &lt;!&ndash;                反馈类型：<input id="replyType" name="replyType" type="radio" value="1">网络问题&nbsp;&ndash;&gt;-->
+<!--        &lt;!&ndash;                <input id="replyType" name="replyType" type="radio" value="2">改进建议&nbsp;&ndash;&gt;-->
+<!--        &lt;!&ndash;                <input id="replyType" name="replyType" type="radio" value="3">试题问题&nbsp;&ndash;&gt;-->
+<!--        &lt;!&ndash;                <input id="replyType" name="replyType" type="radio" value="4">系统bug&nbsp;&ndash;&gt;-->
+<!--        &lt;!&ndash;                <input id="replyType" name="replyType" type="radio" value="0">其他<br>&ndash;&gt;-->
+<!--        &lt;!&ndash;                内    容：<textarea rows="8" cols="80" id="feedbackContent" style="width: 87%;vertical-align: top;resize:none;" maxlength="1000"></textarea>&ndash;&gt;-->
+<!--        &lt;!&ndash;                <br>&ndash;&gt;-->
+<!--        &lt;!&ndash;                <span class="input-tips">请输入内容，1000个字以内</span>&ndash;&gt;-->
+<!--        &lt;!&ndash;                <br>&ndash;&gt;-->
+<!--        &lt;!&ndash;                图    片：<input type="file" id="file" name="file" style="width:168px;" accept="image/png,image/jpg,image/jpeg">&ndash;&gt;-->
+
+<!--        &lt;!&ndash;                <span id="imgTips" style="color: red;font-size:10px;">(每次可上传一张小于2M的图片，图片格式：jpg、jpeg、png)</span>&ndash;&gt;-->
+
+<!--        &lt;!&ndash;                <div id="imgDelDiv" style="display:inline-block"><img id="previewTheImg" style="width:40px;height:30px;cursor:pointer;" title="点击图片查看大图"><a id="">删除</a></div>&ndash;&gt;-->
+
+<!--        &lt;!&ndash;                <br>&ndash;&gt;-->
+<!--        &lt;!&ndash;                <span style="color: red;display: none" id="showNullFeedback"></span>&ndash;&gt;-->
+
+<!--        &lt;!&ndash;            </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;        </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;    </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;    <div class="clear10"></div>&ndash;&gt;-->
+<!--        &lt;!&ndash;    <div class="dialog-bottom" align="center">&ndash;&gt;-->
+<!--        &lt;!&ndash;        <a id="fbSubmitBtn" data="http://tiku.kgc.cn:80/testing/," title="" class="blue-bg left" style="left: 100px;">提交</a>&ndash;&gt;-->
+<!--        &lt;!&ndash;        <a id="fbReturnBtn" title="" class="blue-bg right">返回</a>&ndash;&gt;-->
+<!--        &lt;!&ndash;    </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;</div>&ndash;&gt;-->
+<!--        &lt;!&ndash;<div id="photo" align="center" style="z-index: 10000;">&ndash;&gt;-->
+<!--        &lt;!&ndash;    <div id="photobg"></div>&ndash;&gt;-->
+<!--        &lt;!&ndash;    <div id="videobg" align="center">&ndash;&gt;-->
+<!--        &lt;!&ndash;        <video id="video" width="302px" height="354px" autoplay="autoplay"></video>&ndash;&gt;-->
+<!--        &lt;!&ndash;        <canvas style="display: none;" id="canvas"></canvas>&ndash;&gt;-->
+<!--        &lt;!&ndash;    </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;    <div id="photoText">&ndash;&gt;-->
+<!--        &lt;!&ndash;        请让您的脸部调整到画面正中&ndash;&gt;-->
+<!--        &lt;!&ndash;    </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;    <div id="photoBt" align="center">&ndash;&gt;-->
+<!--        &lt;!&ndash;        <a id="makePhoto" class="photoButton">确认</a>&ndash;&gt;-->
+<!--        &lt;!&ndash;        <a id="checkPhoto" class="photoButton" style="display: none;">认证</a>&ndash;&gt;-->
+<!--        &lt;!&ndash;    </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;</div>&ndash;&gt;-->
+<!--        &lt;!&ndash;<div id="clause" align="center" style="z-index: 10000;">&ndash;&gt;-->
+<!--        &lt;!&ndash;    <div align="center">&ndash;&gt;-->
+<!--        &lt;!&ndash;        <p style="text-align: center;"><span style="font-size: 20px;"></span><span style="font-size: 24px;">题库使用申明条款</span></p><p><span style="font-size: 20px;"><br></span></p><p style="text-align: left;"><strong><span style="font-size: 18px;">为了营造健康和积极向上的学习环境，请仔细阅读以下条款</span></strong><span style="font-size: 18px;">。</span></p><p style="text-align: left;"><span style="font-size: 18px;"><br></span></p><p style="text-align: left;"><span style="font-size: 14px;">1)请按照题库功能正常使用题库，涉及到使用的问题或任何建议请通过题库反馈渠道正常反馈。</span></p><p style="text-align: left;"><span style="font-size: 14px;"><br></span></p><p style="text-align: left;"><span style="font-size: 14px;">2)在涉及到内容输入的地方请遵守国家的政策法规进行理性表达，并注意使用文明用语。</span></p><p style="text-align: left;"><span style="font-size: 14px;"><br></span></p><p style="text-align: left;"><span style="font-size: 14px;">3)反对任何借助第三方软件、工具、插件进行所谓的“刷题”行为，一经发现，系统将不限于“警告、通告、账号封禁”等方式进行处理。</span></p><p style="text-align: left;"><br></p>&ndash;&gt;-->
+<!--        &lt;!&ndash;    </div>&ndash;&gt;-->
+<!--        &lt;!&ndash;    <span id="span_countDown" style="display: none;"></span>&ndash;&gt;-->
+<!--        &lt;!&ndash;    <input id="agreeWait" name="agreeWait" type="button" value="同意条款并采集身份信息（10）">&ndash;&gt;-->
+<!--        &lt;!&ndash;    <input name="agree" id="agree" type="button" value="同意条款并采集身份信息" style="display: none;">&ndash;&gt;-->
+<!--        &lt;!&ndash;    &lt;!&ndash;  <a id="agree"&ndash;&gt;-->
+<!--        &lt;!&ndash;   href="javascript:void(0);" class="photoSub" disabled="false"&ndash;&gt;-->
+<!--        &lt;!&ndash;   ">认证</a>&ndash;&gt;&ndash;&gt;-->
+<!--        &lt;!&ndash;</div>&ndash;&gt;-->
+
+<!--        <div id="indialog" class="font-yahei hide"></div>-->
+<!--        &lt;!&ndash; alert错误弹出框 &ndash;&gt;-->
+<!--        <div id="feedbackAlertDialog" style="z-index: 10000;">-->
+<!--            <div class="dialog-top white">-->
+<!--                <span class="left">提示</span>-->
+<!--            </div>-->
+<!--            <div class="dialog-body" style="font-size: 17px;">-->
+<!--                <div class="tisi acenter strong">您的反馈已成功提交，我们将在云豆网反馈专区进行统一回复，请关注！</div>-->
+<!--            </div>-->
+<!--            <div class="dialog-bottom" style="padding-left: 150px;">-->
+<!--                <a id="fbCloseDialog" class="blue-bg">关闭</a>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div id="outerdiv" style="position:fixed;top:0;left:0;background:rgba(0,0,0,0.3);z-index:1;width:100%;height:100%;display:none;">-->
+<!--            <div id="innerdiv" style="position:absolute;">-->
+<!--                <img id="bigimg" style="border:1px solid #fff;" src="http://tiku.kgc.cn/testing/index/262629/4f1dc905e2d34fbfbbaa7acfec28c165" title="点击图片关闭">-->
+<!--            </div>-->
+<!--        </div>-->
+
+
+
+
+<!--        <div id="qb-sougou-search" style="display: none; opacity: 0;"><p>搜索</p><p class="last-btn">复制</p><iframe src="cid:frame-2E64E4A1D2873695471C9C9A5F882609@mhtml.blink"></iframe></div><div style="opacity: 0.25; position: absolute; border: none; background: rgb(0, 0, 0); top: 0px; left: 0px; z-index: 9999; display: none; height: 1818px; width: 1519px;"></div><div style="opacity: 0.25; position: absolute; border: none; background: rgb(0, 0, 0); top: 0px; left: 0px; z-index: 9999; display: none; height: 1818px; width: 1519px;"></div><div style="opacity: 0.25; position: absolute; border: none; background: rgb(0, 0, 0); top: 0px; left: 0px; z-index: 9999; display: none; height: 1818px; width: 1519px;"></div><div style="opacity: 0.25; position: absolute; border: none; background: rgb(0, 0, 0); top: 0px; left: 0px; z-index: 9999; display: none; height: 1818px; width: 1519px;"></div><div style="opacity: 0.25; position: absolute; border: none; background: rgb(0, 0, 0); top: 0px; left: 0px; z-index: 9999; display: none; height: 1818px; width: 1519px;"></div></body></html>-->

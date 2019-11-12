@@ -29,13 +29,13 @@ public class PaperServiceImpl implements PaperService {
     }
 
     @Override
-    public int findPaperCountService(String pnum, String pdateStart, String pdateEnd,Integer classid, String username) {
-        return paperMapper.findPaperCount(pnum,pdateStart,pdateEnd,classid,username);
+    public int findPaperCountService(String pnum, String pdateStart, String pdateEnd,Integer classid, String username,Integer isidentify) {
+        return paperMapper.findPaperCount(pnum,pdateStart,pdateEnd,classid,username,isidentify);
     }
 
     @Override
-    public List<Paper> findPaperService(String pnum, String pdateStart, String pdateEnd, Integer classid, String username, int pageStart, int pageSize) {
-        return paperMapper.findPaper(pnum,pdateStart,pdateEnd,classid,username,pageStart,pageSize);
+    public List<Paper> findPaperService(String pnum, String pdateStart, String pdateEnd, Integer classid, String username,Integer isidentify, int pageStart, int pageSize) {
+        return paperMapper.findPaper(pnum,pdateStart,pdateEnd,classid,username,isidentify ,pageStart,pageSize);
     }
 
     @Override

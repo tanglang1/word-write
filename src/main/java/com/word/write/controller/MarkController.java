@@ -38,6 +38,12 @@ public class MarkController {
             , @RequestParam(value = "isflag", required = false) Integer isflag
             , @RequestParam(value = "stuclass", required = false) Integer stuclass
             , @RequestParam(value = "pnum", required = false) String pnum) {
+        if(pnum==""){
+            pnum=null;
+        }
+        if(markDateStart==""){
+            markDateStart=null;
+        }
         // 获取页面显示的条数
         int pageNum = Integer.parseInt(request.getParameter("limit")); //pageSize
         // 获取页面当前页
@@ -75,6 +81,7 @@ public class MarkController {
     public int updPaper(Mark mark) {
         int count = 0;
         if (mark != null) {
+            //mark.setMarkdate(null);
             count = markService.updMarkService(mark);
         }
         return count;
@@ -85,11 +92,14 @@ public class MarkController {
     public int sendMark(Mark mark) throws Exception {
         int count=0;
         if(mark!=null){
-            SendMsg_webchinese sendMsg_webchinese=new SendMsg_webchinese();
+            System.out.println(mark.getMid());
+            Sendmss sendmss=new Sendmss();
             Mark mark1=markService.findMarkByIdService(mark.getMid());
-            List<Student> list=markService.findStudentByStuId(mark.getStuid(),mark.getStuclass());
-            String text="尊敬的家长，您的孩子在"+mark1.getPnum()+"测试中的分数为："+mark1.getMark();
-            sendMsg_webchinese.sendMsg(list.get(0).getParphone(),text);
+            Student student=markService.findStudentByStuId(mark1.getStuid(),mark1.getStuclass());
+            System.out.println("----->"+student.getParphone());
+            System.out.println("----->"+mark1.getMark());
+            System.out.println("----->"+student.getParphone());
+            sendmss.sendSms2(student.getParphone(),mark1.getMark(),mark1.getPnum());
             count= markService.updMarkService(mark);
         }
         return count;

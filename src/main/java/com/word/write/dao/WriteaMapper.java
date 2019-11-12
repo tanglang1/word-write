@@ -10,8 +10,16 @@ import java.util.List;
 
 @Mapper
 public interface WriteaMapper {
-    List<Paper> findPaperByPnum(@Param("pnum") String pnum, @Param("classid") Integer classid);
-
+    List<Paper> findPaperByPnum(@Param("classid") Integer classid
+            , @Param("pageStart") int pageStart
+            , @Param("pageSize") int pageSize);
+    int findPaperByPnumCount(@Param("classid") Integer classid);
+    List<Paper> findPaperHistory(@Param("classid") Integer classid
+            , @Param("stuid") String stuid
+            , @Param("pageStart") int pageStart
+            , @Param("pageSize") int pageSize);
+    int findPaperHistoryCount(@Param("classid") Integer classid
+            , @Param("stuid") String stuid);
     List<Paper> showExam(@Param("pnum") String pnum, @Param("classid") Integer classid);
 
     List<Writea> findWritea(@Param("isyes") Integer isyes
@@ -24,8 +32,9 @@ public interface WriteaMapper {
     );
 
     List<Writea> findWriteaByIsYes(@Param("isyes") Integer isyes
-            , @Param("pnum") String pnum
+            , @Param("markdate") String markdate
             , @Param("stuclass") Integer stuclass
+            , @Param("mid") Integer mid
             , @Param("stuid") String stuid
     );
 

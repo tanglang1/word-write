@@ -3,7 +3,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>修改分数信息</title>
     <link rel="stylesheet"
           href="../../layuicms/layui/css/layui.css" >
     <script type="text/javascript"
@@ -25,13 +25,13 @@
     <div class="layui-row" style="border-bottom:1px solid grey ;" id="div">
         <h1><img src="../../images/tit1.png" />&nbsp;修改分数</h1>
     </div>
-    <br /><input type="text" id="w" name="w" th:value="${mid}" class="layui-hide" />
+    <br /><input type="text" id="mid" name="mid" th:value="${mid}" class="layui-hide" />
     <div class="layui-row">
         <div class="layui-col-sm4">
             <div class="layui-form-item">
                 <label class="layui-form-label">学号<span style="color: red;">*</span></label>
                 <div class="layui-input-block">
-                    <input type="text" id="stuid" name="stuid"  required
+                    <input type="text" id="stuid" name="stuid"   required
                            lay-verify="required" autocomplete="off" class="layui-input">
                 </div>
             </div>
@@ -66,19 +66,8 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">试卷号<span style="color: red;">*</span></label>
                 <div class="layui-input-block">
-                    <input type="text" id="pnum" name="pnum"
+                    <input type="text" id="pnum" name="pnum" disabled
                            lay-verify="required"  autocomplete="off" class="layui-input">
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="layui-row">
-        <div class="layui-col-sm4">
-            <div class="layui-inline">
-                <label class="layui-form-label">分数日期<span style="color: red;">*</span></label>
-                <div class="layui-input-inline">
-                    <input type="text" id="markdate" name="markdate"  lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input" style="width: 270px;">
                 </div>
             </div>
         </div>
@@ -148,10 +137,10 @@
                     type : "post",
                     url : "../mark/updMark",
                     data : {
+                        mid : $("#mid").val(),
                         stuid : $("#stuid").val(),
                         stuclass : $("#classid option:selected").val(),
                         mark : $("#mark").val(),
-                        markdate: $("#markdate").val(),
                         pnum: $("#pnum").val(),
                         remark: $("#remark").val(),
                         isflag:$("input[type='radio']:checked").val()
@@ -230,9 +219,9 @@
     function upload(){
         $.ajax({
             type:"post",
-            url:"../student/findStudentById",
+            url:"../mark/findMarkById",
             data:{
-                stuid:$("#stuid").val()
+                mid:$("#mid").val()
             },
             dataType:"json",
             success:function(reqData){

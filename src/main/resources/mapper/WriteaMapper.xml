@@ -3,29 +3,52 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.word.write.dao.WriteaMapper">
+    <!--    添加-->
     <insert id="addWritea" parameterType="Writea">
         INSERT INTO `word_write`.`writea` (`writeid`, `pid`, `writeword`, `isyes`, `writedate`, `stuid`, `stuclass`,
                                            `pnum`)
         VALUES (#{writeid}, #{pid}, #{writeword}, #{isyes}, #{writedate}, #{stuid}, #{stuclass}, #{pnum});
     </insert>
-
+    <!--    删除-->
     <delete id="delWritea" parameterType="Integer">
         delete
         from `word_write`.`writea`
         where writeid = #{writeid}
     </delete>
+    <!--    自测列表-->
     <select id="findPaperByPnum" resultType="Paper">
         select p.*,w.*,s.* from paper p,worda w,stuclass s
         <where>
-            p.wordid = w.wordid and p.classid = s.classid and p.pid in (select min(pid) from paper group by pnum)
-            <if test="pnum!=null">
-                and p.pnum like CONCAT('%',#{pnum},'%')
+            p.wordid = w.wordid and p.classid = s.classid and p.isidentify=1
+            <if test="classid!=null">
+                and p.classid=#{classid}
             </if>
+            order by p.pid desc
+            limit #{pageStart},#{pageSize}
+        </where>
+    </select>
+    <select id="findPaperByPnumCount" resultType="int">
+        select COUNT(1) from paper p,worda w,stuclass s
+        <where>
+            p.wordid = w.wordid and p.classid = s.classid and p.isidentify=1
             <if test="classid!=null">
                 and p.classid=#{classid}
             </if>
         </where>
     </select>
+    <!--    历史纪录-->
+    <select id="findPaperHistory" resultType="Paper">
+        select m.*,p.*,s.* from mark m ,student s,paper p where m.stuid=s.stuid and m.pnum=p.pnum and m.stuclass=p.classid
+        and p.isidentify=1 and s.stuid=#{stuid} and p.classid=#{classid}
+        order by m.markdate desc
+        limit #{pageStart},#{pageSize}
+
+    </select>
+    <select id="findPaperHistoryCount" resultType="int">
+        select COUNT(*) from mark m ,student s,paper p where m.stuid=s.stuid and m.pnum=p.pnum and m.stuclass=p.classid
+        and p.isidentify=1 and s.stuid=#{stuid} and p.classid=#{classid}
+    </select>
+    <!--    展示题目-->
     <select id="showExam" resultType="Paper">
         select p.*,w.*,s.* from paper p,worda w,stuclass s
         <where>
@@ -38,6 +61,7 @@
             </if>
         </where>
     </select>
+    <!--    查询默写表-->
     <select id="findWriteaCount" resultType="int">
         select COUNT(1) from writea writea w,student t,stuclass c
         <where>
@@ -56,6 +80,7 @@
             </if>
         </where>
     </select>
+    <!--    试卷数-->
     <select id="countPaper" resultType="int">
         select count(1)
         from paper p,
@@ -66,6 +91,7 @@
           and p.pnum = #{pnum}
           and p.classid = #{classid}
     </select>
+    <!--    查询-->
     <select id="findWritea" resultType="Writea">
         select * from writea writea w,student t,stuclass c
         <where>
@@ -83,20 +109,17 @@
                 and isyes=#{isyes}
             </if>
         </where>
-        limit #{pageStart},#{pageSize}
+         limit #{pageStart},#{pageSize}
     </select>
+    <!--    根据IsYes查询-->
     <select id="findWriteaByIsYes" resultType="Writea">
-        select * from writea w,student t,stuclass c,paper p,worda wo
+        select m.*,p.*,s.*,w.*,wo.* from mark m ,student s,paper p,writea w,worda wo
         <where>
-            w.stuid=t.stuid and w.stuclass=c.classid and p.wordid = wo.wordid and p.pnum=w.pnum
-            <if test="pnum!=null">
-                and w.pnum like CONCAT('%',#{pnum},'%')
-            </if>
-            <if test="stuclass!=null">
-                and w.stuclass=#{stuclass}
-            </if>
-            <if test="stuid!=null">
-                and w.stuid=#{stuid}
+        m.stuid=s.stuid and m.pnum=p.pnum and w.pnum=m.pnum and wo.wordid=p.wordid and w.pid=p.pid
+        and m.stuclass=p.classid and s.stuid=#{stuid}
+        and p.classid=#{stuclass} and w.writedate=#{markdate}
+            <if test="mid!=null">
+                and m.mid=#{mid}
             </if>
             <if test="isyes!=null">
                 and w.isyes=#{isyes}
@@ -104,5 +127,4 @@
         </where>
         order by writedate
     </select>
-
 </mapper>
