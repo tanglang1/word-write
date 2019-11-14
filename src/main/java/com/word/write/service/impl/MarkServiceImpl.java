@@ -47,4 +47,9 @@ public class MarkServiceImpl implements MarkService {
     public Student findStudentByStuId(String stuid, Integer stuclass) {
         return markMappper.findStudentByStuId(stuid, stuclass);
     }
+
+    @Override
+    public List<Mark> findMark1(String stuid) {
+        return markMappper.findMark1(stuid);
+    }
 }

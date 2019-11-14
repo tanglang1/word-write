@@ -17,7 +17,7 @@ public interface MarkMappper {
             , @Param("pageStart") int pageStart
             , @Param("pageSize") int pageSize
     );
-
+    List<Mark> findMark1(@Param("stuid") String stuid);
     int findMarkCount(@Param("isflag") Integer isflag
             , @Param("markDateStart") String markDateStart
             , @Param("markDateEnd") String markDateEnd

@@ -31,4 +31,5 @@ public interface MarkService {
     int delMarkService(Integer mid);
     Student findStudentByStuId(String stuid
             ,Integer stuclass);
+    List<Mark> findMark1(String stuid);
 }

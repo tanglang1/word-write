@@ -69,4 +69,14 @@ public class WriteaServiceImpl implements WriteaService {
     public int delWritea(Integer writeid) {
         return writeaMapper.delWritea(writeid);
     }
+
+    @Override
+    public List<Paper> findPaperByPnum1(Integer classid) {
+        return writeaMapper.findPaperByPnum1(classid);
+    }
+
+    @Override
+    public List<Paper> findPaperHistory1(Integer classid, String stuid) {
+        return writeaMapper.findPaperHistory1(classid, stuid);
+    }
 }

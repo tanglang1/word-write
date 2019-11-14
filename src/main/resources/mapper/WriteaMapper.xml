@@ -27,6 +27,17 @@
             limit #{pageStart},#{pageSize}
         </where>
     </select>
+    <!--    自测列表-->
+    <select id="findPaperByPnum1" resultType="Paper">
+        select p.*,w.*,s.* from paper p,worda w,stuclass s
+        <where>
+            p.wordid = w.wordid and p.classid = s.classid and p.isidentify=1
+            <if test="classid!=null">
+                and p.classid=#{classid}
+            </if>
+            order by p.pid desc
+        </where>
+    </select>
     <select id="findPaperByPnumCount" resultType="int">
         select COUNT(1) from paper p,worda w,stuclass s
         <where>
@@ -43,6 +54,11 @@
         order by m.markdate desc
         limit #{pageStart},#{pageSize}
 
+    </select>
+    <select id="findPaperHistory1" resultType="Paper">
+        select m.*,p.*,s.* from mark m ,student s,paper p where m.stuid=s.stuid and m.pnum=p.pnum and m.stuclass=p.classid
+        and p.isidentify=1 and s.stuid=#{stuid} and p.classid=#{classid}
+        order by m.markdate desc
     </select>
     <select id="findPaperHistoryCount" resultType="int">
         select COUNT(*) from mark m ,student s,paper p where m.stuid=s.stuid and m.pnum=p.pnum and m.stuclass=p.classid

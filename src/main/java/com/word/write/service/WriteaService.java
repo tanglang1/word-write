@@ -48,4 +48,7 @@ public interface WriteaService {
     int addWritea(Writea writea);
 
     int delWritea(Integer writeid);
+    List<Paper> findPaperByPnum1(Integer classid);
+    List<Paper> findPaperHistory1( Integer classid
+            , String stuid);
 }

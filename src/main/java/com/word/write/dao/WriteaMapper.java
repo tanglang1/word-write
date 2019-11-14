@@ -13,11 +13,14 @@ public interface WriteaMapper {
     List<Paper> findPaperByPnum(@Param("classid") Integer classid
             , @Param("pageStart") int pageStart
             , @Param("pageSize") int pageSize);
+    List<Paper> findPaperByPnum1(@Param("classid") Integer classid);
     int findPaperByPnumCount(@Param("classid") Integer classid);
     List<Paper> findPaperHistory(@Param("classid") Integer classid
             , @Param("stuid") String stuid
             , @Param("pageStart") int pageStart
             , @Param("pageSize") int pageSize);
+    List<Paper> findPaperHistory1(@Param("classid") Integer classid
+            , @Param("stuid") String stuid);
     int findPaperHistoryCount(@Param("classid") Integer classid
             , @Param("stuid") String stuid);
     List<Paper> showExam(@Param("pnum") String pnum, @Param("classid") Integer classid);
